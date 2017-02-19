@@ -8,4 +8,6 @@
     <color name="primaryWpi">#AC2B37</color>
     <color name="secondaryWpi">#A9B0B7</color>
     <color name="black">#000000</color>
+
+    <color name="indicator_unselected">#4D000000</color>
 </resources>
