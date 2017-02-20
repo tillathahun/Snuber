@@ -1,6 +1,7 @@
 package com.mylesspencertyler.snuber;
 
 import android.animation.ArgbEvaluator;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -106,7 +108,7 @@ public class PagerActivity extends AppCompatActivity {
 
         final int color1 = ContextCompat.getColor(this, R.color.primaryWpi);
         final int color2 = ContextCompat.getColor(this, R.color.secondaryWpi);
-        final int color3 = ContextCompat.getColor(this, R.color.colorAccent);
+        final int color3 = ContextCompat.getColor(this, R.color.primaryWpi);
 
         final int[] colorList = new int[]{color1, color2, color3};
 
@@ -216,7 +218,7 @@ public class PagerActivity extends AppCompatActivity {
 
         ImageView img;
 
-        int[] bgs = new int[]{R.drawable.ic_flight_24dp, R.drawable.ic_mail_24dp, R.drawable.ic_explore_24dp};
+        int[] bgs = new int[]{R.drawable.ic_time_to_leave_black_24px, R.drawable.ic_timelapse_black_24px, R.drawable.ic_notifications_active_black_24px};
 
         public PlaceholderFragment() {
         }
@@ -237,13 +239,45 @@ public class PagerActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
+
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            textView.setText(getPageMainString(getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            TextView textViewDescription = (TextView) rootView.findViewById(R.id.section_description);
+            textViewDescription.setText(getPageDescriptionString(getArguments().getInt(ARG_SECTION_NUMBER)));
 
             img = (ImageView) rootView.findViewById(R.id.section_img);
             img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
 
             return rootView;
+        }
+
+        private String getPageMainString(int sectionNumber) {
+            Resources res = getResources();
+            String[] onboard = res.getStringArray(R.array.onboardingProcess);
+            switch (sectionNumber) {
+                case 1:
+                    return onboard[0];
+                case 2:
+                    return onboard[1];
+                case 3:
+                    return onboard[2];
+            }
+            return null;
+        }
+
+        private String getPageDescriptionString(int sectionNumber) {
+            Resources res = getResources();
+            String[] onboardDescription = res.getStringArray(R.array.onboardDescription);
+            switch (sectionNumber) {
+                case 1:
+                    return onboardDescription[0];
+                case 2:
+                    return onboardDescription[1];
+                case 3:
+                    return onboardDescription[2];
+            }
+            return null;
         }
     }
 
