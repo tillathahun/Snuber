@@ -74,6 +74,12 @@ public class PagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pager);
 
 
+        mNextBtn = (ImageButton) findViewById(R.id.intro_btn_next);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            mNextBtn.setImageDrawable(
+                    Utils.tintMyDrawable(ContextCompat.getDrawable(this, R.drawable.ic_chevron_right_24dp), Color.WHITE)
+            );
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -233,6 +239,10 @@ public class PagerActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            img = (ImageView) rootView.findViewById(R.id.section_img);
+            img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+
             return rootView;
         }
     }
