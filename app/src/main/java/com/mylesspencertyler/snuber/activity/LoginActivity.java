@@ -1,20 +1,17 @@
 package com.mylesspencertyler.snuber.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.mylesspencertyler.snuber.R;
+import com.mylesspencertyler.snuber.fragment.LoginFragment;
 import com.mylesspencertyler.snuber.utils.Utils;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends FragmentActivity {
 
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
     boolean isUserFirstTime;
-
-
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
 
     @Override
     protected void onStart() {
@@ -39,15 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+        // Check that the activity is using the layout version with the fragment_container FrameLayout
+        if(findViewById(R.id.fragment_container) != null)
+        {
+            // if we are being restored from a previous state, then we dont need to do anything and should
+            // return or else we could end up with overlapping fragments.
+            if(savedInstanceState != null)
+                return;
 
-        /*
-         * If back pressed, close the app, don't go back to the PagerActivity
-         */
-        finish();
+            // Create an instance of editorFrag
+            LoginFragment loginFragment = new LoginFragment();
+
+            // add fragment to the fragment container layout
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, loginFragment).commit();
+        }
     }
 }
