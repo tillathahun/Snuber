@@ -1,22 +1,18 @@
-package com.mylesspencertyler.snuber;
+package com.mylesspencertyler.snuber.activity;
 
 import android.animation.ArgbEvaluator;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.utils.Utils;
 
 public class PagerActivity extends AppCompatActivity {
@@ -168,7 +165,7 @@ public class PagerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 //  update 1st time pref
-                Utils.saveSharedSetting(PagerActivity.this, MainActivity.PREF_USER_FIRST_TIME, "false");
+                Utils.saveSharedSetting(PagerActivity.this, LoginActivity.PREF_USER_FIRST_TIME, "false");
 
             }
         });

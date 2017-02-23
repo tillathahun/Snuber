@@ -15,4 +15,12 @@
         <item>Have an idea of when SNAP will arrive, so you can plan ahead.</item>
         <item>No more listening for the honk or looking for flashing yellow lights. Receive a notification and be on your way. </item>
     </string-array>
+
+    <string name="userChoose">What type of user are you?</string>
+    <string name="driver">Driver</string>
+    <string name="student">Student</string>
+
+    <string name="nameQuestion">What is your name?</string>
+    <string name="name">Name</string>
+    <string name="next">Next</string>
 </resources>
