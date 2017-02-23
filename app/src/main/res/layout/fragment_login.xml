@@ -22,8 +22,7 @@
         android:id="@+id/userChoose_textView"
         android:text="@string/userChoose"
         android:gravity="center"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"/>
+        android:textSize="20sp"/>
 
     <!-- Password Label -->
 

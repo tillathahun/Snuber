@@ -3,6 +3,8 @@ package com.mylesspencertyler.snuber.activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.fragment.LoginFragment;
