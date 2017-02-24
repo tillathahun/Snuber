@@ -19,6 +19,16 @@
             android:background="@drawable/ic_account_circle_24px"
             android:scaleType="fitCenter"
             android:layout_marginTop="60dp"/>
+
+        <ImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="60dp"/>
+
     </FrameLayout>
 
     <TextView

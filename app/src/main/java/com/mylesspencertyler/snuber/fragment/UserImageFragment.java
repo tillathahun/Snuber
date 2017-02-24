@@ -2,33 +2,35 @@ package com.mylesspencertyler.snuber.fragment;
 
 
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mylesspencertyler.snuber.R;
-import com.mylesspencertyler.snuber.activity.LoginActivity;
+import com.mylesspencertyler.snuber.utils.RoundedImageView;
 import com.mylesspencertyler.snuber.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static android.R.attr.bitmap;
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -40,6 +42,8 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
     private View view;
     private Button chooseImage;
     private TextView profileName;
+    private ImageView roundedImageView;
+    private ImageView profileIcon;
 
 
     private Uri outputFileUri;
@@ -58,6 +62,11 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
 
         profileName = (TextView) view.findViewById(R.id.username_textView);
         profileName.setText(Utils.readSharedSetting(getActivity(), StudentFragment.PREF_USERNAME_STUDENT, "User Name"));
+
+        roundedImageView = (ImageView) view.findViewById(R.id.profile_picture);
+        roundedImageView.setVisibility(View.GONE);
+
+        profileIcon = (ImageView) view.findViewById(R.id.section_img_user);
 
         return view;
     }
@@ -126,10 +135,22 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
                 } else {
                     selectedImageUri = data == null ? null : data.getData();
                 }
+
+                Bitmap uriBitmap = null;
+
+                try {
+                    uriBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                    Bitmap croppedBitmap = RoundedImageView.getCroppedBitmap(uriBitmap, (int)getActivity().getResources().getDimension(R.dimen.half_profile_height));
+                    BitmapDrawable ob = new BitmapDrawable(getActivity().getResources(), croppedBitmap);
+                    roundedImageView.setBackground(ob);
+                    profileIcon.setVisibility(View.GONE);
+                    roundedImageView.setVisibility(View.VISIBLE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
-
-
 
     }
 }
