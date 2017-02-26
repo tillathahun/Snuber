@@ -17,7 +17,7 @@ def request_ride(request):
 @login_required
 def cancel_ride_request(request, id):
     ride = get_object_or_404(RideRequest, pk=id)
-    if ride.user = request.user:
+    if ride.user == request.user:
         ride.status = 'CN'
         ride.save()
         return JsonResponse({'success': True})
