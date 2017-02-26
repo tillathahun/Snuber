@@ -17,5 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^', include('core.urls')),
+    url(r'^ride-requests/', include('ride_rquests.urls'))
     url(r'^admin/', admin.site.urls),
 ]
