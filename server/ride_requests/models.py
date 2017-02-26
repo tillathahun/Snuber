@@ -8,6 +8,7 @@ class RideRequest(models.Model):
         ('EN', 'En Route'),
         ('IP', 'Ride In Progress'),
         ('CP', 'Ride Completed'),
+        ('CN', 'Ride Canceled'),
     )
 
     destination_latitude = models.DecimalField(max_digits=7, decimal_places=5)
