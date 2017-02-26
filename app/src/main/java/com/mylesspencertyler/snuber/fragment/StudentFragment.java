@@ -176,10 +176,10 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean isValidPassword(String password) {
-        if(password.length() > 0) {
+        if(password.length() >= 5) {
             return true;
         } else {
-            editText_Pass.setError("Invalid Name");
+            editText_Pass.setError("Password must be at least 5 characters long");
         }
         return false;
     }
