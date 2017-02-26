@@ -7,3 +7,5 @@
 /build
 /captures
 .externalNativeBuild
+__pychache__
+*.pyc
