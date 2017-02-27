@@ -22,7 +22,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mylesspencertyler.snuber.R;
+import com.mylesspencertyler.snuber.activity.LoginActivity;
+import com.mylesspencertyler.snuber.activity.PagerActivity;
 import com.mylesspencertyler.snuber.utils.RoundedImageView;
+import com.mylesspencertyler.snuber.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,20 +101,6 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
         final File sdImageMainDirectory = new File(root, fname);
         outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
-//        // Camera.
-//        final List<Intent> cameraIntents = new ArrayList<Intent>();
-//        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//        final PackageManager packageManager = getActivity().getPackageManager();
-//        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-//        for(ResolveInfo res : listCam) {
-//            final String packageName = res.activityInfo.packageName;
-//            final Intent intent = new Intent(captureIntent);
-//            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-//            intent.setPackage(packageName);
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-//            cameraIntents.add(intent);
-//        }
-
         // Filesystem.
         final Intent galleryIntent = new Intent();
         galleryIntent.setType("image/*");
@@ -119,9 +108,6 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
 
         // Chooser of filesystem options.
         final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
-
-//        // Add the camera options.
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
         startActivityForResult(chooserIntent, SELECT_PICTURE_REQUEST_CODE);
     }
@@ -185,10 +171,28 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
 
         /**
          * This this where we will make the upload of the new user to the server.
+         * Also, set shared pref of logged in here.
          * @param v
          */
+        // TODO: Finish onClick functionality
         @Override
         public void onClick(View v) {
+
+            /**
+             * Create new user in the database. If successful,
+             *  - set the shared pref PREF_USER_LOGGED_IN = true;
+             *  - set the shared pref PREF_USER_IS_DRIVER = response.isDriver;
+             *  - send the user to the appropriate screen based on isDriver
+             *
+             *  If unsuccessful, toast and return user to the name text input
+             */
+
+            //create new user in the database
+
+            // if the user is successfully created, save the shared preference that the user is logged in
+            Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "false");
+
+            // send the user to the appropriate place based upon whether or not they are a driver
 
         }
     }

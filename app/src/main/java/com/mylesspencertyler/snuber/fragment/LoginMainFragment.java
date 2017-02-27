@@ -15,23 +15,23 @@ import android.widget.Button;
  * Created by tyler on 2/22/2017.
  */
 
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginMainFragment extends Fragment implements View.OnClickListener {
 
-    private Button studentButton;
-    private Button driverButton;
+    private Button signupButton;
+    private Button loginButton;
     private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_login, container, false);
+        view = inflater.inflate(R.layout.fragment_login_main, container, false);
 
-        studentButton = (Button) view.findViewById(R.id.btn_student);
-        studentButton.setOnClickListener(this);
+        signupButton = (Button) view.findViewById(R.id.btn_signup);
+        signupButton.setOnClickListener(this);
 
-        driverButton = (Button) view.findViewById(R.id.btn_driver);
-        driverButton.setOnClickListener(this);
+        loginButton = (Button) view.findViewById(R.id.btn_login);
+        loginButton.setOnClickListener(this);
 
         return view;
     }
@@ -39,30 +39,30 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_student:
-                switchFragment(LoginType.STUDENT);
+            case R.id.btn_signup:
+                switchFragment(LoginType.SIGNUP);
                 break;
-            case R.id.btn_driver:
-                switchFragment(LoginType.DRIVER);
+            case R.id.btn_login:
+                switchFragment(LoginType.LOGIN);
                 break;
         }
     }
 
     private void switchFragment(LoginType loginType) {
         switch (loginType) {
-            case STUDENT:
+            case SIGNUP:
                 final FragmentTransaction ftStudent = getFragmentManager().beginTransaction();
                 ftStudent.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
-                ftStudent.replace(R.id.fragment_container, new StudentFragment(), "StudentFragmentTag");
+                ftStudent.replace(R.id.fragment_container, new SignupFragment(), "StudentFragmentTag");
                 ftStudent.addToBackStack(null);
                 ftStudent.commit();
                 break;
-            case DRIVER:
+            case LOGIN:
                 final FragmentTransaction ftDriver = getFragmentManager().beginTransaction();
                 ftDriver.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
-                ftDriver.replace(R.id.fragment_container, new DriverFragment(), "DriverFragmentTag");
+                ftDriver.replace(R.id.fragment_container, new LoginViewFragment(), "DriverFragmentTag");
                 ftDriver.addToBackStack(null);
                 ftDriver.commit();
                 break;

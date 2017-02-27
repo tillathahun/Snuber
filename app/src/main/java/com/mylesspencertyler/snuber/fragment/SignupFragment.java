@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylesspencertyler.snuber.R;
-import com.mylesspencertyler.snuber.utils.Utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +25,7 @@ import java.util.regex.Pattern;
  * Created by tyler on 2/22/2017.
  */
 
-public class StudentFragment extends Fragment implements View.OnClickListener {
+public class SignupFragment extends Fragment implements View.OnClickListener {
 
     private EditText editText_Name;
     private EditText editText_Email;
@@ -47,7 +46,7 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        view = inflater.inflate(R.layout.fragment_student, container, false);
+        view = inflater.inflate(R.layout.fragment_signup, container, false);
 
         editText_Name = (EditText) view.findViewById(R.id.studentName_editText);
         editText_Email = (EditText) view.findViewById(R.id.studentEmail_editText);

@@ -9,6 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/driverName_textView"
+            android:text="@string/signup"
+            android:gravity="center"
+            android:padding="30dp"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
         <ImageView
             android:id="@+id/section_img"
             android:layout_width="164dp"
@@ -18,7 +28,7 @@
             android:alpha="0.30"
             android:background="@drawable/ic_school_black_24px"
             android:scaleType="fitCenter"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="40dp"/>
     </FrameLayout>
 
     <LinearLayout
