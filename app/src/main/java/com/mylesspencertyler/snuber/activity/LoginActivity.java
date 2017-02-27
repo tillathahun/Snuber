@@ -3,17 +3,17 @@ package com.mylesspencertyler.snuber.activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.mylesspencertyler.snuber.R;
-import com.mylesspencertyler.snuber.fragment.LoginFragment;
+import com.mylesspencertyler.snuber.fragment.LoginMainFragment;
 import com.mylesspencertyler.snuber.utils.Utils;
 
 public class LoginActivity extends FragmentActivity {
 
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
-    boolean isUserFirstTime;
+    public static final String PREF_USER_LOGGED_IN = "user_logged_in";
+
+    boolean isUserFirstTime, isUserLoggedIn;
 
     @Override
     protected void onStart() {
@@ -37,21 +37,27 @@ public class LoginActivity extends FragmentActivity {
             startActivity(introIntent);
         }
 
-        setContentView(R.layout.activity_login);
+        isUserLoggedIn = Boolean.valueOf(Utils.readSharedSetting(LoginActivity.this, PREF_USER_LOGGED_IN, "false"));
 
-        // Check that the activity is using the layout version with the fragment_container FrameLayout
-        if(findViewById(R.id.fragment_container) != null)
-        {
-            // if we are being restored from a previous state, then we dont need to do anything and should
-            // return or else we could end up with overlapping fragments.
-            if(savedInstanceState != null)
-                return;
+        if(isUserLoggedIn) {
+            //check if user is a driver or a student, send them to the appropriate place.
 
-            // Create an instance of editorFrag
-            LoginFragment loginFragment = new LoginFragment();
+        } else {
+            setContentView(R.layout.activity_login);
 
-            // add fragment to the fragment container layout
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, loginFragment).commit();
+            // Check that the activity is using the layout version with the fragment_container FrameLayout
+            if (findViewById(R.id.fragment_container) != null) {
+                // if we are being restored from a previous state, then we dont need to do anything and should
+                // return or else we could end up with overlapping fragments.
+                if (savedInstanceState != null)
+                    return;
+
+                // Create an instance of editorFrag
+                LoginMainFragment loginFragment = new LoginMainFragment();
+
+                // add fragment to the fragment container layout
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, loginFragment).commit();
+            }
         }
     }
 }
