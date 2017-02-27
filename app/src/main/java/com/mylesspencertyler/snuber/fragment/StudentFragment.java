@@ -121,12 +121,19 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
 
         if(areAllValid()){
-            Utils.saveSharedSetting(getActivity(), PREF_USERNAME_STUDENT, editText_Name.getText().toString());
+            //Utils.saveSharedSetting(getActivity(), PREF_USERNAME_STUDENT, editText_Name.getText().toString());
 
             final FragmentTransaction ftStudent = getFragmentManager().beginTransaction();
             ftStudent.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
 
-            ftStudent.replace(R.id.fragment_container, new UserImageFragment(), "UserImageFragmentTag");
+            Bundle args = new Bundle();
+            UserImageFragment userImageFragment = new UserImageFragment();
+            args.putString("name", editText_Name.getText().toString());
+            args.putString("email", editText_Email.getText().toString());
+            args.putString("password", editText_Pass.getText().toString());
+            userImageFragment.setArguments(args);
+
+            ftStudent.replace(R.id.fragment_container, userImageFragment, "UserImageFragmentTag");
             ftStudent.addToBackStack(null);
             ftStudent.commit();
         } else {

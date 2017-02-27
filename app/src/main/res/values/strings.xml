@@ -34,4 +34,6 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="passwordConfirm">Password Confirmation</string>
+
+    <string name="signup">Signup!</string>
 </resources>
