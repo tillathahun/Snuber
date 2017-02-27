@@ -5,5 +5,5 @@ package com.mylesspencertyler.snuber.utils;
  */
 
 public enum LoginType {
-    DRIVER, STUDENT
+    LOGIN, SIGNUP
 }

@@ -16,11 +16,27 @@
         <item>No more listening for the honk or looking for flashing yellow lights. Receive a notification and be on your way. </item>
     </string-array>
 
-    <string name="userChoose">What type of user are you?</string>
+    <string name="userChoose">What type of user are you</string>
     <string name="driver">Driver</string>
     <string name="student">Student</string>
 
     <string name="nameQuestion">What is your name?</string>
     <string name="name">Name</string>
     <string name="next">Next</string>
+
+    <string name="userImageQuestion">Choose your profile picture…</string>
+    <string name="chooseImage">Choose Profile Image</string>
+
+    <string name="gallery">Gallery</string>
+    <string name="takePicture">Take Picture</string>
+    
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="passwordConfirm">Password Confirmation</string>
+
+    <string name="signup">Signup</string>
+    <string name="signupRegular">Signup</string>
+    <string name="login">Log In</string>
+    <string name="loginRegular">Log In</string>
 </resources>

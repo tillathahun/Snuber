@@ -6,4 +6,6 @@
     <dimen name="appbar_padding_top">8dp</dimen>
 
     <dimen name="activity_margin_half">8dp</dimen>
+
+    <dimen name="half_profile_height">82dp</dimen>
 </resources>
