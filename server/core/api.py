@@ -29,6 +29,10 @@ def login(request):
 
     return JsonResponse({'success': False})
 
+def csrf_token(request):
+    token = django.middleware.csrf.get_token(request)
+    return JsonResponse({'csrf_token': token})
+
 @login_required
 def logout(request):
     logout(request)
