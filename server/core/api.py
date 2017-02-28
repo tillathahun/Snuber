@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm
 
 def register(request):
@@ -28,6 +28,11 @@ def login(request):
         return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})
+
+@login_required
+def logout(request):
+    logout(request)
+    return JsonResponse({'success': True})
 
 @login_required
 def update_location(request):
