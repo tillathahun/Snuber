@@ -28,3 +28,20 @@ def login(request):
         return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})
+
+@login_required
+def update_location(request):
+    if request.method != 'POST':
+        HttpResponseNotFound('Incorrect access method')
+
+    latitude = request.POST.get('latitude')
+    longitude = request.POST.get('longitude')
+
+    if latitude:
+        request.user.latitude = latitude
+
+    if longitude:
+        request.user.longitude = longitude
+
+    request.user.save()
+    return JsonResponse({'success': True})
