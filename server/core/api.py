@@ -11,9 +11,12 @@ def register(request):
 
     form = UserForm(request.POST, request.FILES)
     print(request.POST)
+    print(request.FILES)
     if form.is_valid():
         form.save()
         return JsonResponse({'success': True})
+
+    print(form.errors)
 
     return JsonResponse({'success': False})
 
