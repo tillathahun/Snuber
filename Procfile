@@ -1,1 +1,1 @@
-web: gunicorn server.snuber.wsgi --log-file -
+web: gunicorn server.snuber.wsgi:application --log-file -
