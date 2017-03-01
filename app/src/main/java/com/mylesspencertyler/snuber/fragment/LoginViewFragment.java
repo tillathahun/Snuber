@@ -3,7 +3,6 @@ package com.mylesspencertyler.snuber.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,11 +15,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.*;
 import com.mylesspencertyler.snuber.R;
-import com.mylesspencertyler.snuber.utils.Utils;
+import com.mylesspencertyler.snuber.utils.SnuberClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by tyler on 2/22/2017.
@@ -81,7 +86,37 @@ public class LoginViewFragment extends Fragment implements View.OnClickListener 
 
         // check if fields are valid
         if(areAllValid()) {
-            // check db for user
+            String email = editText_Email.getText().toString();
+            String username = email.substring(0, email.length() - 8);
+            String password = editText_Password.getText().toString();
+            SnuberClient.login(username, password, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        if(response.getBoolean("success")) {
+                            if(response.getBoolean("is_driver")) {
+                                // Redirect to driver page
+                            } else {
+                                // Redirect to student page
+                            }
+                            Toast toast = Toast.makeText(getActivity(), "Logged In!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+                            Toast toast = Toast.makeText(getActivity(), "Error Logging In!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.e("Snuber Networking", responseString);
+                    Toast toast = Toast.makeText(getActivity(), "Login Request Failed", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
 
 
             /**
