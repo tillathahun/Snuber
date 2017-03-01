@@ -17,13 +17,13 @@ def register(request):
     return JsonResponse({'success': False})
 
 
-def login(request):
+def auth_login(request):
     if request.method != 'POST':
         return HttpResponseNotFound('Incorrect access method')
 
     username = request.POST.get('username')
     password = request.POST.get('password')
-    
+
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
@@ -36,7 +36,7 @@ def csrf_token(request):
     return JsonResponse({'csrf_token': token})
 
 @login_required
-def logout(request):
+def auth_logout(request):
     logout(request)
     return JsonResponse({'success': True})
 
