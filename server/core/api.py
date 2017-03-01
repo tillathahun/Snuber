@@ -27,7 +27,7 @@ def auth_login(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'is_driver': user.isDriver})
 
     return JsonResponse({'success': False})
 
