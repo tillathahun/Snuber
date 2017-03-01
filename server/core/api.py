@@ -10,6 +10,7 @@ def register(request):
         return HttpResponseNotFound('Incorrect access method')
 
     form = UserForm(request.POST, request.FILES)
+    print(request.POST)
     if form.is_valid():
         form.save()
         return JsonResponse({'success': True})

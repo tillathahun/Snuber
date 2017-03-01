@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
+        android:layout_height="310dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Street #"
+            android:ems="10"
+            android:id="@+id/numberInputLine"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+
+        <EditText
+            android:layout_width="261dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/nameInputLine"
+            android:text="Street Name"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <Button
+        android:text="Request Ride"
+        android:layout_width="match_parent"
+        android:id="@+id/requestButton"
+        android:elevation="0dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:fontFamily="sans-serif"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:text="Estimated Arrival Time:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/estimatedTimeLine"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:fontFamily="sans-serif"
+        android:textAlignment="center" />
+
+    <Button
+        android:text="Cancel Request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancelButton" />
+
+
+</LinearLayout>
