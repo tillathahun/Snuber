@@ -1,6 +1,13 @@
 package com.mylesspencertyler.snuber.utils;
 
+import android.util.Log;
+
 import com.loopj.android.http.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * Created by mspen on 2/27/2017.
@@ -14,13 +21,14 @@ public class SnuberClient {
         SnuberRestClient.post("api/login/", params, responseHandler);
     }
 
-    public static void register(String firstName, String lastName, String email, String username, String password, AsyncHttpResponseHandler responseHandler) {
+    public static void register(String firstName, String lastName, String email, String username, String password, ByteArrayInputStream avatar, AsyncHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
         params.put("first_name", firstName);
         params.put("last_name", lastName);
         params.put("email", email);
         params.put("username", username);
         params.put("password", password);
+        params.put("avatar", avatar, username + ".jpg");
         SnuberRestClient.post("api/register/", params, responseHandler);
     }
 

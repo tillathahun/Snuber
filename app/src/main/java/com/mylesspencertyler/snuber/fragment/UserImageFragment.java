@@ -2,9 +2,11 @@ package com.mylesspencertyler.snuber.fragment;
 
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -20,13 +22,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.activity.LoginActivity;
 import com.mylesspencertyler.snuber.activity.PagerActivity;
 import com.mylesspencertyler.snuber.utils.RoundedImageView;
+import com.mylesspencertyler.snuber.utils.SnuberClient;
 import com.mylesspencertyler.snuber.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -34,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -145,7 +157,7 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
                     profileIcon.setVisibility(View.GONE);
                     roundedImageView.setVisibility(View.VISIBLE);
 
-                    signupListener = new SignupListener(hmap, selectedImageUri);
+                    signupListener = new SignupListener(hmap, croppedBitmap);
                     signupButton.setOnClickListener(signupListener);
                     signupButton.setEnabled(true);
 
@@ -162,11 +174,11 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
     private class SignupListener implements View.OnClickListener{
 
         private HashMap<String, String> hashMap;
-        private Uri selectedImageURI;
+        private Bitmap selectedImageBitmap;
 
-        public SignupListener(HashMap hashMap, Uri selectedImageURI) {
+        public SignupListener(HashMap hashMap, Bitmap selectedImageBitmap) {
             this.hashMap = hashMap;
-            this.selectedImageURI = selectedImageURI;
+            this.selectedImageBitmap = selectedImageBitmap;
         }
 
         /**
@@ -187,13 +199,45 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
              *  If unsuccessful, toast and return user to the name text input
              */
 
-            //create new user in the database
+            String name = this.hashMap.get("name");
+            String firstName = "";
+            String lastName = "";
+            if(name.indexOf(' ') != -1) {
+                firstName = name.substring(0, name.indexOf(' '));
+                lastName = name.substring(name.indexOf(' ') + 1, name.length());
+            }
+            String email = this.hashMap.get("email");
+            String username = email.substring(0, email.length() - 8);
+            String password = this.hashMap.get("password");
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            this.selectedImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            ByteArrayInputStream image = new ByteArrayInputStream(stream.toByteArray());
 
-            // if the user is successfully created, save the shared preference that the user is logged in
-            Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "false");
+            SnuberClient.register(firstName, lastName, email, username, password, image, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    // if the user is successfully created, save the shared preference that the user is logged in
+                    try {
+                        if(response.getBoolean("success")) {
+                            Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "false");
+                            Toast toast = Toast.makeText(getActivity(), "Registered!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+                            Toast toast = Toast.makeText(getActivity(), "Registration Failed!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            // send the user to the appropriate place based upon whether or not they are a driver
-
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.e("Snuber Networking", responseString);
+                    Toast toast = Toast.makeText(getActivity(), "Registration Request Failed", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
         }
     }
 }
