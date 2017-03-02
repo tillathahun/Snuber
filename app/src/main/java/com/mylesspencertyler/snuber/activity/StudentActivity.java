@@ -37,10 +37,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.text.Text;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
+import com.mylesspencertyler.snuber.utils.SnuberClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 
 /**
@@ -72,8 +79,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-        Log.d("PrintLat", "My Lat: " + currentLatitude);
-        Log.d("PrintLong", "My Long: " + currentLongitude);
+//        Log.d("PrintLat", "My Lat: " + currentLatitude);
+//        Log.d("PrintLong", "My Long: " + currentLongitude);
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
                 .title("You are here");
@@ -89,6 +96,25 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
+        SnuberClient.updateLocation(currentLatitude, currentLongitude, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if(!response.getBoolean("success")) {
+                        Toast toast = Toast.makeText(getBaseContext(), "Location Update Failed", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast toast = Toast.makeText(getBaseContext(), "Error updating location. Network error", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
     //Returns the estimated arrival time in minutes
     protected int calculateArrivalTime(){
