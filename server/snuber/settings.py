@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,20 @@ STATIC_URL = '/static/'
 # Modified User class
 
 AUTH_USER_MODEL = 'core.User'
+
+# Media Files (S3)
+
+AWS_STORAGE_BUCKET_NAME = 'snuber'
+AWS_ACCESS_KEY_ID = 'AKIAIIAZN6NXC5CQ7UGA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_SIGNATURE_VERSION='s3v4'
+
+
+# Static File (S3)
+
+STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+STATIC_ROOT = '/static/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
