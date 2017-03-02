@@ -1,6 +1,7 @@
 package com.mylesspencertyler.snuber.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,7 +18,11 @@ import android.widget.Toast;
 
 import com.loopj.android.http.*;
 import com.mylesspencertyler.snuber.R;
-import com.mylesspencertyler.snuber.utils.SnuberClient;
+import com.mylesspencertyler.snuber.activity.DriverActivity;
+import com.mylesspencertyler.snuber.activity.LoginActivity;
+import com.mylesspencertyler.snuber.activity.PagerActivity;
+import com.mylesspencertyler.snuber.activity.StudentActivity;
+import com.mylesspencertyler.snuber.utils.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,9 +100,14 @@ public class LoginViewFragment extends Fragment implements View.OnClickListener 
                     try {
                         if(response.getBoolean("success")) {
                             if(response.getBoolean("is_driver")) {
+                                Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "true");
                                 // Redirect to driver page
+                                Intent driverIntent = new Intent(getActivity(), DriverActivity.class);
+                                startActivity(driverIntent);
                             } else {
-                                // Redirect to student page
+                                Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "false");
+                                Intent studentIntent = new Intent(getActivity(), StudentActivity.class);
+                                startActivity(studentIntent);
                             }
                             Toast toast = Toast.makeText(getActivity(), "Logged In!", Toast.LENGTH_SHORT);
                             toast.show();

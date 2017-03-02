@@ -3,6 +3,7 @@ package com.mylesspencertyler.snuber.activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.fragment.LoginMainFragment;
@@ -12,8 +13,9 @@ public class LoginActivity extends FragmentActivity {
 
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
     public static final String PREF_USER_LOGGED_IN = "user_logged_in";
+    public static final String PREF_USER_IS_DRIVER = "user_is_driver";
 
-    boolean isUserFirstTime, isUserLoggedIn;
+    boolean isUserFirstTime, isUserLoggedIn, isUserDriver;
 
     @Override
     protected void onStart() {
@@ -37,10 +39,21 @@ public class LoginActivity extends FragmentActivity {
             startActivity(introIntent);
         }
 
+        Log.e("UNGBUNG", "THIS IS BEING CALLED");
         isUserLoggedIn = Boolean.valueOf(Utils.readSharedSetting(LoginActivity.this, PREF_USER_LOGGED_IN, "false"));
 
         if(isUserLoggedIn) {
             //check if user is a driver or a student, send them to the appropriate place.
+            isUserDriver = Boolean.valueOf(Utils.readSharedSetting(LoginActivity.this, PREF_USER_IS_DRIVER, "false"));
+            if(isUserDriver) {
+                //send to driver page
+                Intent driverIntent = new Intent(this, DriverActivity.class);
+                startActivity(driverIntent);
+            } else {
+                //send to the student page
+                Intent studentIntent = new Intent(this, StudentActivity.class);
+                startActivity(studentIntent);
+            }
 
         } else {
             setContentView(R.layout.activity_login);

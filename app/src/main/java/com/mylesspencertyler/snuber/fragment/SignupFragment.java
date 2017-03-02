@@ -193,7 +193,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
 
     private boolean isValidPasswordConfirm(String password, String passwordConfirm) {
         if(!password.equals(passwordConfirm)){
-            editText_PassConfirm.setError("Emails do not match");
+            editText_PassConfirm.setError("Passwords do not match");
         } else {
             return true;
         }
