@@ -148,4 +148,4 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # Increase Token Session Length
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 60*60*24*365
+SESSION_COOKIE_AGE = 60*60*24*365 # Set to 1 year
