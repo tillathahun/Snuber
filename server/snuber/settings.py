@@ -144,3 +144,8 @@ AWS_S3_SIGNATURE_VERSION='s3v4'
 STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 STATIC_ROOT = '/static/'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Increase Token Session Length
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 60*60*24*365
