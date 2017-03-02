@@ -28,6 +28,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.activity.LoginActivity;
 import com.mylesspencertyler.snuber.activity.PagerActivity;
+import com.mylesspencertyler.snuber.activity.StudentActivity;
 import com.mylesspencertyler.snuber.utils.RoundedImageView;
 import com.mylesspencertyler.snuber.utils.SnuberClient;
 import com.mylesspencertyler.snuber.utils.Utils;
@@ -219,9 +220,12 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
                     // if the user is successfully created, save the shared preference that the user is logged in
                     try {
                         if(response.getBoolean("success")) {
-                            Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "false");
+                            Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "true");
+                            Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "false");
                             Toast toast = Toast.makeText(getActivity(), "Registered!", Toast.LENGTH_SHORT);
                             toast.show();
+                            Intent studentIntent = new Intent(getActivity(), StudentActivity.class);
+                            startActivity(studentIntent);
                         } else {
                             Toast toast = Toast.makeText(getActivity(), "Registration Failed!", Toast.LENGTH_SHORT);
                             toast.show();
