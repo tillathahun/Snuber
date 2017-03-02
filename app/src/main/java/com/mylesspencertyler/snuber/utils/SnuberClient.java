@@ -32,7 +32,7 @@ public class SnuberClient {
         SnuberRestClient.post("api/register/", params, responseHandler);
     }
 
-    public static void updateLocation(int latitude, int longitude, AsyncHttpResponseHandler responseHandler) {
+    public static void updateLocation(double latitude, double longitude, AsyncHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
         params.put("latitude", latitude);
         params.put("longitude", longitude);
