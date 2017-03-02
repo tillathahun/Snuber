@@ -60,6 +60,9 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     private EditText nameInputLine;
     private double currentLatitude;
     private double currentLongitude;
+    private double destLong;
+    private double destLat;
+    private boolean destinationExists;
 
 
     boolean mIsReceiverRegistered = false;
@@ -69,12 +72,21 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-        Log.d("PrintLat", "Lat: " + currentLatitude);
-        Log.d("PrintLong", "Long: " + currentLongitude);
+        Log.d("PrintLat", "My Lat: " + currentLatitude);
+        Log.d("PrintLong", "My Long: " + currentLongitude);
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title("I am here!");
+                .title("You are here");
         mMap.addMarker(options);
+        if(destinationExists){
+            LatLng destLatLng = new LatLng(destLat, destLong);
+            Log.d("PrintLat", "Dest Lat: " + destLat);
+            Log.d("PrintLong", "Dest Long: " + destLong);
+            MarkerOptions destOptions = new MarkerOptions()
+                    .position(destLatLng)
+                    .title("Destination");
+            mMap.addMarker(destOptions);
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
     }
@@ -99,8 +111,10 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         try {
             addresses = geocoder.getFromLocationName(numberInputLine.getText().toString() + " " + nameInputLine.getText().toString() + "Worcester, Massachusetts", 1);
             if(addresses.size() > 0) {
-                destLoc.setLatitude(addresses.get(0).getLatitude());
-                destLoc.setLongitude(addresses.get(0).getLongitude());
+                destLong = addresses.get(0).getLongitude();
+                destLat = addresses.get(0).getLatitude();
+                destLoc.setLongitude(destLong);
+                destLoc.setLatitude(destLat);
             }
             else return false;
         }catch (IOException e){}
@@ -129,6 +143,14 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                     numberInputLine.setEnabled(false);
                     nameInputLine.setEnabled(false);
                     estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
+                    destinationExists = true;
+                    LatLng latLng = new LatLng(destLat, destLong);
+                    Log.d("PrintLat", "Lat: " + destLat);
+                    Log.d("PrintLong", "Long: " + destLong);
+                    MarkerOptions options = new MarkerOptions()
+                            .position(latLng)
+                            .title("Destination");
+                    mMap.addMarker(options);
                 }
             }
         });
@@ -136,6 +158,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
+                destinationExists = false;
                 requestButton.setEnabled(true);
                 numberInputLine.setEnabled(true);
                 numberInputLine.setText("Street #");
@@ -205,7 +228,6 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     public void onConnected(@Nullable Bundle bundle) {
         if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1600);
-
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         //if (location == null) {
