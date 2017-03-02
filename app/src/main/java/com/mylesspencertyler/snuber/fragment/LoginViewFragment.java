@@ -101,11 +101,13 @@ public class LoginViewFragment extends Fragment implements View.OnClickListener 
                         if(response.getBoolean("success")) {
                             if(response.getBoolean("is_driver")) {
                                 Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "true");
+                                Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "true");
                                 // Redirect to driver page
                                 Intent driverIntent = new Intent(getActivity(), DriverActivity.class);
                                 startActivity(driverIntent);
                             } else {
                                 Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "false");
+                                Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "true");
                                 Intent studentIntent = new Intent(getActivity(), StudentActivity.class);
                                 startActivity(studentIntent);
                             }
