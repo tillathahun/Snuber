@@ -13,7 +13,9 @@ def register(request):
     print(request.POST)
     print(request.FILES)
     if form.is_valid():
-        form.save()
+        user = form.save()
+        user.set_password(request.POST.get('password'))
+        user.save()
         return JsonResponse({'success': True})
 
     print(form.errors)
