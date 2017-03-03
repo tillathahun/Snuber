@@ -84,7 +84,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setMaxWaitTime(1)
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
-        switchActivityButton = (Button)findViewById(R.id.requestButton);
+        switchActivityButton = (Button)findViewById(R.id.switchActivityButton);
         switchActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Switch to student activity

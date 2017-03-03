@@ -41,12 +41,14 @@ import com.google.android.gms.vision.text.Text;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.utils.SnuberClient;
+import com.mylesspencertyler.snuber.utils.SnuberRestClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -98,8 +100,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                     .title("Destination");
             mMap.addMarker(destOptions);
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
         SnuberClient.updateLocation(currentLatitude, currentLongitude, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -127,40 +129,99 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     //returns true if valid address on map, within radius, and if server got the request
-    protected boolean validRequest(){
-        Location wpiLoc = new Location("");
+    protected void validRequest(){
+        final Location wpiLoc = new Location("");
         wpiLoc.setLatitude(42.27384);
         wpiLoc.setLongitude(-71.807933);
 
-        Location myLoc = new Location("");
+        final Location myLoc = new Location("");
         myLoc.setLatitude(currentLatitude);
         myLoc.setLongitude(currentLongitude);
 
-        Location destLoc = new Location("");
-        Geocoder geocoder = new Geocoder(this);
+        final Location destLoc = new Location("");
+        Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
         List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocationName(numberInputLine.getText().toString() + " " + nameInputLine.getText().toString() + "Worcester, Massachusetts", 1);
-            if(addresses.size() > 0) {
-                destLong = addresses.get(0).getLongitude();
-                destLat = addresses.get(0).getLatitude();
-                destLoc.setLongitude(destLong);
-                destLoc.setLatitude(destLat);
-            }
-            else return false;
-        }catch (IOException e){}
+        String location = numberInputLine.getText().toString() + " " + nameInputLine.getText().toString() + ", Worcester, MA 01609";
+        Log.d("Snuber Geo", "Location String: " + location);
+        SnuberRestClient.getAddressFromName(location, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if(response.getString("status").equals("OK")) {
+                        JSONObject loc = response.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+                        destLong = loc.getDouble("lng");
+                        destLat = loc.getDouble("lat");
+                        Log.d("Snuber Geo", "Lat: " + destLat + " Long: " + destLong);
+                        destLoc.setLongitude(destLong);
+                        destLoc.setLatitude(destLat);
 
-        if(((myLoc.distanceTo(wpiLoc) < 1609) &&
-                ((nameInputLine.getText().toString().equals("Washington Square") && numberInputLine.getText().toString().equals("2")) || (destLoc.distanceTo(wpiLoc) < 1609))) &&
-                serverRecievedRequest()){ //if distance is less than one mile(in meters) and same for dest or if address is for union station then pass if server gets it
-            return true;
-        }
-        else return false;
+                        if(((myLoc.distanceTo(wpiLoc) < 1609) &&
+                                ((nameInputLine.getText().toString().equals("Washington Square") && numberInputLine.getText().toString().equals("2")) || (destLoc.distanceTo(wpiLoc) < 1609))) &&
+                                serverRecievedRequest()){ //if distance is less than one mile(in meters) and same for dest or if address is for union station then pass if server gets it
+                            executeRequest();
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(getBaseContext(), "Can't find that location. Are you sure it is correct?", Toast.LENGTH_SHORT);
+                        toast.show();
+                        Log.d("Snuber Geo", response.getString("status"));
+                        Log.d("Snuber Geo", response.getString("error_message"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast toast = Toast.makeText(getBaseContext(), "Error getting location. Network error", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
     /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
     protected boolean serverRecievedRequest(){ //returns true if the server gets the request properly
         return true;
     }
+
+    protected void executeRequest() {
+        requestButton.setEnabled(false);
+        numberInputLine.setEnabled(false);
+        nameInputLine.setEnabled(false);
+        estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
+        destinationExists = true;
+        LatLng latLng = new LatLng(destLat, destLong);
+        Log.d("PrintLat", "Lat: " + destLat);
+        Log.d("PrintLong", "Long: " + destLong);
+        MarkerOptions options = new MarkerOptions()
+                .position(latLng)
+                .title("Destination");
+        mMap.addMarker(options);
+        SnuberClient.requestRide(destLat, destLong, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if(response.getBoolean("success")) {
+                        Toast toast = Toast.makeText(getBaseContext(), "Ride requested!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        rideID = response.getInt("ride_id");
+                    } else {
+                        Toast toast = Toast.makeText(getBaseContext(), "There was a problem requesting a ride. Try again later.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast toast = Toast.makeText(getBaseContext(), "Error requesting ride. Network error", Toast.LENGTH_SHORT);
+                toast.show();
+                Log.e("Snuber Networking", responseString);
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,43 +230,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         requestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                if(validRequest()){  //if Request is successful
-                    requestButton.setEnabled(false);
-                    numberInputLine.setEnabled(false);
-                    nameInputLine.setEnabled(false);
-                    estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
-                    destinationExists = true;
-                    LatLng latLng = new LatLng(destLat, destLong);
-                    Log.d("PrintLat", "Lat: " + destLat);
-                    Log.d("PrintLong", "Long: " + destLong);
-                    MarkerOptions options = new MarkerOptions()
-                            .position(latLng)
-                            .title("Destination");
-                    mMap.addMarker(options);
-                    SnuberClient.requestRide(destLat, destLong, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                if(response.getBoolean("success")) {
-                                    Toast toast = Toast.makeText(getBaseContext(), "Ride requested!", Toast.LENGTH_SHORT);
-                                    toast.show();
-                                    rideID = response.getInt("ride_id");
-                                } else {
-                                    Toast toast = Toast.makeText(getBaseContext(), "There was a problem requesting a ride. Try again later.", Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Toast toast = Toast.makeText(getBaseContext(), "Error requesting ride. Network error", Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                    });
-                }
+                validRequest();
             }
         });
         cancelButton =(Button)findViewById(R.id.cancelButton);
@@ -249,7 +274,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         });
 
         if(isAlsoDriver()){
-            switchActivityButton = (Button)findViewById(R.id.requestButton);
+            switchActivityButton = (Button)findViewById(R.id.switchActivityButton);
             switchActivityButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Switch to driver activity
