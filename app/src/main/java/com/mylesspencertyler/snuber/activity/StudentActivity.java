@@ -243,7 +243,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         builder.include(markerHashMap.get("destinationMarker").getPosition());
         LatLngBounds bounds = builder.build();
 
-        int padding = 40; // offset from edges of the map in pixels
+        int padding = 80; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         mMap.animateCamera(cu);
 
