@@ -185,6 +185,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
 
     protected void executeRequest() {
         requestButton.setEnabled(false);
+        cancelButton.setEnabled(true);
         numberInputLine.setEnabled(false);
         nameInputLine.setEnabled(false);
         estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
@@ -234,6 +235,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
             }
         });
         cancelButton =(Button)findViewById(R.id.cancelButton);
+        cancelButton.setEnabled(false);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
