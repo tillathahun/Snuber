@@ -1,0 +1,9 @@
+Content-Type:application/json
+Authorization:key=AAAAPozWBDo:APA91bGK5ked7TUUA0N9NezzrygTVztROvjyizXfecztWsotDwRga1ZCbJ8YSVVidCSzKLeRNcp6fmBi4DUL3nAcf6zdampLAb2YdyFBn_WSVRvAXhN0JOjz9Q5n3huSqu4cMweoXBfE
+
+{ "notification": {
+      "title": "Your SNAP driver has arrived,
+      "body": "Tap to open map view"
+    },
+   "to" : THIS IS THE USER ID YOU ARE PICKING UP (refresh token)
+}

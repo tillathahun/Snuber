@@ -211,7 +211,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                             executeRequest();
                         }
                     } else {
-                        Toast toast = Toast.makeText(getBaseContext(), "Can't find that location. Are you sure it is correct?", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getBaseContext(), "Location is outside of SNAP's radius. Please try another location.", Toast.LENGTH_SHORT);
                         toast.show();
                         Log.d("Snuber Geo", response.getString("status"));
                         Log.d("Snuber Geo", response.getString("error_message"));
