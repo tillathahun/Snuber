@@ -77,6 +77,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     private int rideID = -1;
 
     boolean mIsReceiverRegistered = false;
+    boolean isFirstTimeOpening = true;
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 113;
 
@@ -99,6 +100,12 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                     .position(destLatLng)
                     .title("Destination");
             mMap.addMarker(destOptions);
+        }
+
+        if(isFirstTimeOpening){
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
+            isFirstTimeOpening = false;
         }
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
@@ -185,6 +192,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
 
     protected void executeRequest() {
         requestButton.setEnabled(false);
+        cancelButton.setEnabled(true);
         numberInputLine.setEnabled(false);
         nameInputLine.setEnabled(false);
         estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
@@ -234,11 +242,13 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
             }
         });
         cancelButton =(Button)findViewById(R.id.cancelButton);
+        cancelButton.setEnabled(false);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
                 destinationExists = false;
                 requestButton.setEnabled(true);
+                cancelButton.setEnabled(false);
                 numberInputLine.setEnabled(true);
                 numberInputLine.setText("");
                 nameInputLine.setEnabled(true);
