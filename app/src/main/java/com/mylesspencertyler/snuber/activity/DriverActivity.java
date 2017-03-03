@@ -1,5 +1,6 @@
 package com.mylesspencertyler.snuber.activity;
 
+import android.content.Intent;
 import android.Manifest;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -11,6 +12,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mylesspencertyler.snuber.R;
 
+import static com.mylesspencertyler.snuber.R.layout.activity_student;
+
 /**
  * Created by smbeaupre on 2/26/2017.
  */
@@ -35,6 +40,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private GoogleApiClient mGoogleApiClient;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
+    private Button switchActivityButton;
 
     boolean mIsReceiverRegistered = false;
 
@@ -78,6 +84,14 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setMaxWaitTime(1)
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
+        switchActivityButton = (Button)findViewById(R.id.requestButton);
+        switchActivityButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Switch to student activity
+                startActivity(new Intent(DriverActivity.this, StudentActivity.class));
+
+            }
+        });
     }
 
 

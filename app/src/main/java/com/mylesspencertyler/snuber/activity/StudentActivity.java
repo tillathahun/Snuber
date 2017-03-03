@@ -1,5 +1,6 @@
 package com.mylesspencertyler.snuber.activity;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
@@ -70,8 +71,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     private double destLong;
     private double destLat;
     private boolean destinationExists;
+    private Button switchActivityButton;
     private int rideID = -1;
-
 
     boolean mIsReceiverRegistered = false;
 
@@ -120,6 +121,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         });
     }
     //Returns the estimated arrival time in minutes
+    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
     protected int calculateArrivalTime(){
         return 1;
     }
@@ -155,7 +157,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         }
         else return false;
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
     protected boolean serverRecievedRequest(){ //returns true if the server gets the request properly
         return true;
     }
@@ -245,6 +247,17 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 }
             }
         });
+
+        if(isAlsoDriver()){
+            switchActivityButton = (Button)findViewById(R.id.requestButton);
+            switchActivityButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Switch to driver activity
+                    startActivity(new Intent(StudentActivity.this, DriverActivity.class));
+
+                }
+            });
+        }
         estimatedTimeLine = (TextView) findViewById(R.id.estimatedTimeLine);
         estimatedTimeLine.setText("No Ride Requested Yet");
         numberInputLine = (EditText) findViewById(R.id.numberInputLine);
@@ -269,7 +282,10 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
+    protected boolean isAlsoDriver(){
+        return true;
+    }
 
     @Override
     protected void onResume() {
