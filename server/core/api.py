@@ -4,7 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm
 from django.middleware.csrf import get_token
-import ride_requests.api
+sys.path.insert(0, '../ride_requests')
+from api import update_ride
 
 def register(request):
     if request.method != 'POST':
@@ -68,5 +69,5 @@ def update_location(request):
 
     request.user.save()
 
-    ride_requests.api.update_ride(request)
+    update_ride(request)
     return JsonResponse({'success': True})
