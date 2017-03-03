@@ -25,7 +25,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         studentActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, studentActivityIntent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setContentTitle("Your SNAP driver has arrived");
+        notificationBuilder.setContentTitle(remoteMessage.getNotification().getTitle());
         notificationBuilder.setContentText(remoteMessage.getNotification().getBody());
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setSmallIcon(R.mipmap.wpi_launcher);

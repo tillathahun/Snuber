@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private double currentLongitude;
     boolean mIsReceiverRegistered = false;
     private boolean goingToStart;
+
+    private ImageView profileIcon;
+    private TextView profileName;
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 112;
 
@@ -147,6 +151,14 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         });
         goingToStart = true;
         nextDestinationButton = (Button)findViewById(R.id.nextDestinationButton);
+
+        // states of the status bar:
+        /**
+         * 1.) No student to pickup : is_queued = false
+         * 2.) En route to student : is_queued = true, gives user info
+         * 3.) At destination : If is_queued = true, rule 2; else rule 1.
+         */
+
         nextDestinationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Remove destination marker
@@ -197,6 +209,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
             }
         });
+
+        profileIcon = (ImageView) findViewById(R.id.list_icon);
+        profileName = (TextView) findViewById(R.id.pickupStudentName_EditText);
     }
 
 
