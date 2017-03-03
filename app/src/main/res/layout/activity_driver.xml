@@ -10,12 +10,7 @@ android:layout_height="match_parent">
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
-    android:layout_height="350dp" />
-
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="310dp" />
 
     <TextView
         android:text="Pickup List:"
@@ -24,6 +19,11 @@ android:layout_height="match_parent">
         android:id="@+id/textView2"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textAlignment="center" />
-</LinearLayout>
+
+    <Button
+        android:text="Switch To Student"
+        android:layout_width="match_parent"
+        android:id="@+id/switchActivityButton"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

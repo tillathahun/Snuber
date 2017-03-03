@@ -1,5 +1,6 @@
 package com.mylesspencertyler.snuber.activity;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationListener;
@@ -40,6 +42,7 @@ import com.google.android.gms.vision.text.Text;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.utils.SnuberClient;
+import com.mylesspencertyler.snuber.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +73,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     private double destLong;
     private double destLat;
     private boolean destinationExists;
-
+    private Button switchActivityButton;
+    private int rideID = -1;
 
     boolean mIsReceiverRegistered = false;
 
@@ -119,6 +123,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         });
     }
     //Returns the estimated arrival time in minutes
+    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
     protected int calculateArrivalTime(){
         return 1;
     }
@@ -154,7 +159,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         }
         else return false;
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
     protected boolean serverRecievedRequest(){ //returns true if the server gets the request properly
         return true;
     }
@@ -179,6 +184,29 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                             .position(latLng)
                             .title("Destination");
                     mMap.addMarker(options);
+                    SnuberClient.requestRide(destLat, destLong, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                if(response.getBoolean("success")) {
+                                    Toast toast = Toast.makeText(getBaseContext(), "Ride requested!", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    rideID = response.getInt("ride_id");
+                                } else {
+                                    Toast toast = Toast.makeText(getBaseContext(), "There was a problem requesting a ride. Try again later.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Toast toast = Toast.makeText(getBaseContext(), "Error requesting ride. Network error", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
                 }
             }
         });
@@ -189,12 +217,55 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 destinationExists = false;
                 requestButton.setEnabled(true);
                 numberInputLine.setEnabled(true);
-                numberInputLine.setText("Street #");
+                numberInputLine.setText("");
                 nameInputLine.setEnabled(true);
-                nameInputLine.setText("Street Name");
+                nameInputLine.setText("");
                 estimatedTimeLine.setText("No Ride Requested Yet");
+
+                if(rideID != -1) {
+                    SnuberClient.cancelRide(rideID, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                if(response.getBoolean("success")) {
+                                    Toast toast = Toast.makeText(getBaseContext(), "Ride Canceled!", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    rideID = -1;
+                                } else {
+                                    Toast toast = Toast.makeText(getBaseContext(), "Unable to cancel ride.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Toast toast = Toast.makeText(getBaseContext(), "Error canceling ride. Network error", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
+                }
             }
         });
+        switchActivityButton = (Button)findViewById(R.id.requestButton);
+        if(isAlsoDriver()){
+            switchActivityButton = (Button)findViewById(R.id.requestButton);
+            switchActivityButton.setEnabled(true);
+            switchActivityButton.setVisibility(View.VISIBLE);
+            switchActivityButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Switch to driver activity
+                    startActivity(new Intent(StudentActivity.this, DriverActivity.class));
+
+                }
+            });
+        }
+        else {
+            switchActivityButton.setEnabled(false);
+            switchActivityButton.setVisibility(Button.VISIBLE);
+        }
         estimatedTimeLine = (TextView) findViewById(R.id.estimatedTimeLine);
         estimatedTimeLine.setText("No Ride Requested Yet");
         numberInputLine = (EditText) findViewById(R.id.numberInputLine);
@@ -219,7 +290,9 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
     }
-
+    protected boolean isAlsoDriver(){
+        return Boolean.valueOf(Utils.readSharedSetting(this, LoginActivity.PREF_USER_IS_DRIVER, "false"));
+    }
 
     @Override
     protected void onResume() {
