@@ -1,36 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
-
-<fragment
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
-    android:layout_height="310dp" />
+    android:layout_height="match_parent">
+    <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <Button
-        android:text="Next Destination"
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/nextDestinationButton"
-        android:backgroundTint="@color/colorPrimary" />
+        tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
+        android:layout_height="310dp" />
 
-    <TextView
-        android:text="No Destination Yet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/destinationLine"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textAlignment="center" />
+        <Button
+            android:text="Next Destination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nextDestinationButton"
+            android:backgroundTint="@color/colorPrimary" />
+
+        <TextView
+            android:text="No Destination Yet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/destinationLine"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/list_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="16dp"/>
+
+            <TextView
+                android:id="@+id/pickupStudentName_EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:text="Switch To Student"
         android:layout_width="match_parent"
         android:id="@+id/switchActivityButton"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
-</LinearLayout>
+</RelativeLayout>
