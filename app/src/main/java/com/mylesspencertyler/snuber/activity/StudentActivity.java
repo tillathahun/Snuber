@@ -77,6 +77,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     private int rideID = -1;
 
     boolean mIsReceiverRegistered = false;
+    boolean isFirstTimeOpening = true;
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 113;
 
@@ -99,6 +100,12 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                     .position(destLatLng)
                     .title("Destination");
             mMap.addMarker(destOptions);
+        }
+
+        if(isFirstTimeOpening){
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
+            isFirstTimeOpening = false;
         }
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
