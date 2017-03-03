@@ -4,8 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm
 from django.middleware.csrf import get_token
-import sys
-sys.path.insert(0, '../ride_requests')
+import requests
 
 def register(request):
     if request.method != 'POST':

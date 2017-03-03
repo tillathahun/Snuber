@@ -4,7 +4,6 @@ from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import RideRequest
 from django.db.models import Count
-import requests
 
 @login_required
 def request_ride(request):
