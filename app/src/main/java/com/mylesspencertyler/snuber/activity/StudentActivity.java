@@ -32,11 +32,14 @@ import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.text.Text;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -47,6 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,9 +83,12 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
 
     boolean mIsReceiverRegistered = false;
     boolean isFirstTimeOpening = true;
+    boolean isDestinationFirstTime = true;
+
+    private HashMap<String, Marker> markerHashMap = new HashMap<>();
+    private ArrayList<Marker> mMarkerArray = new ArrayList<Marker>();
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 113;
-
 
     private void handleNewLocation(Location location) {
         currentLatitude = location.getLatitude();
@@ -91,7 +99,10 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
                 .title("You are here");
-        mMap.addMarker(options);
+        Marker currentMarker = mMap.addMarker(options);
+
+        markerHashMap.put("currentMarker", currentMarker);
+
         if(destinationExists){
             LatLng destLatLng = new LatLng(destLat, destLong);
             Log.d("PrintLat", "Dest Lat: " + destLat);
@@ -99,7 +110,20 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
             MarkerOptions destOptions = new MarkerOptions()
                     .position(destLatLng)
                     .title("Destination");
-            mMap.addMarker(destOptions);
+            Marker destinationMarker = mMap.addMarker(destOptions);
+            markerHashMap.put("destinationMarker", destinationMarker);
+
+            if(isDestinationFirstTime) {
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(markerHashMap.get("currentMarker").getPosition());
+                builder.include(markerHashMap.get("destinationMarker").getPosition());
+                LatLngBounds bounds = builder.build();
+
+                int padding = 0; // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mMap.animateCamera(cu);
+                isDestinationFirstTime = false;
+            }
         }
 
         if(isFirstTimeOpening){
