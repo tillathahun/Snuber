@@ -18,4 +18,4 @@ class RideRequest(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='RQ')
 
     def __str__(self):
-        return "Ride Request #" + self.id
+        return "Ride Request #" + str(self.id)
