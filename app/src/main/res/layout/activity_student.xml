@@ -25,6 +25,8 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:singleLine="true"
             android:hint="Street #" />
 
         <EditText
@@ -34,6 +36,8 @@
             android:id="@+id/nameInputLine"
             android:textAlignment="center"
             android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:singleLine="true"
             android:hint="Street Name" />
    </LinearLayout>
 
