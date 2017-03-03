@@ -10,7 +10,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
-        android:layout_height="310dp" />
+        android:layout_height="300dp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -20,19 +20,19 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Street #"
             android:ems="10"
             android:id="@+id/numberInputLine"
             android:layout_weight="1"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:hint="Street #" />
 
         <EditText
             android:layout_width="261dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:id="@+id/nameInputLine"
-            android:text="Street Name"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:hint="Street Name" />
     </LinearLayout>
 
     <Button
@@ -58,6 +58,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cancelButton" />
+
+    <Button
+        android:text="Switch To Driver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchActivityButton" />
 
 
 </LinearLayout>
