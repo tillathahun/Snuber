@@ -41,7 +41,7 @@ def ride_details(request):
                 latitude = ride.user.latitude
                 longitude = ride.user.longitude
 
-            response = {'is_queued': True, 'id': ride.id, 'user_name': ride.user.first_name + ride.user.last_name, 'user_image': ride.user.avatar.url, 'latitude': latitude, 'longitude': longitude, 'status': ride.status}
+            response = {'is_queued': True, 'id': ride.id, 'user_name': ride.user.first_name + " " + ride.user.last_name, 'user_image': ride.user.avatar.url, 'latitude': latitude, 'longitude': longitude, 'status': ride.status}
         else:
             response = {'is_queued': False}
         return JsonResponse({'success': True, 'ride': response})
