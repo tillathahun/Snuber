@@ -38,10 +38,12 @@
             android:screenOrientation="portrait" />
 
         <activity android:name=".activity.StudentActivity"
-                  android:label="Student Page"/>
+                  android:label="Student Page"
+                  android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.DriverActivity"
-            android:label="Driver Page" />
+            android:label="Driver Page"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".utils.FirebaseHelper">
             <intent-filter>
