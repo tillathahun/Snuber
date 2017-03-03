@@ -103,7 +103,6 @@ public class LoginViewFragment extends Fragment implements View.OnClickListener 
                                 Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "true");
                                 Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_LOGGED_IN, "true");
                                 // Redirect to driver page
-                                // store refreshtoken in the server, call a snuber client function here that updates the firebase token
                                 Intent driverIntent = new Intent(getActivity(), DriverActivity.class);
                                 startActivity(driverIntent);
                             } else {
