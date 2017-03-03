@@ -221,6 +221,13 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 nameInputLine.setEnabled(true);
                 nameInputLine.setText("");
                 estimatedTimeLine.setText("No Ride Requested Yet");
+                mMap.clear();//clear map
+                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title("You are here");
+                mMap.addMarker(options);//re-add my location marker
+
 
                 if(rideID != -1) {
                     SnuberClient.cancelRide(rideID, new JsonHttpResponseHandler() {

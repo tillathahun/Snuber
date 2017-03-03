@@ -8,12 +8,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,6 +43,11 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
     private Button switchActivityButton;
+    private TextView destinationLine;
+    private String destAddress;
+    private double destLat;
+    private double destLong;
+    private boolean hasDest;
 
     boolean mIsReceiverRegistered = false;
 
@@ -57,8 +64,15 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 .position(latLng)
                 .title("I am here!");
         mMap.addMarker(options);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.0));
+        if(hasDest){
+            LatLng destLatLng = new LatLng(destLat, destLong);
+            MarkerOptions destOptions = new MarkerOptions()
+                    .position(destLatLng)
+                    .title("Destination");
+            mMap.addMarker(destOptions);
+        }
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.0));
     }
 
     @Override
@@ -84,6 +98,8 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setMaxWaitTime(1)
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
+        destinationLine = (TextView) findViewById(R.id.destinationLine);
+        hasDest = false;
         switchActivityButton = (Button)findViewById(R.id.requestButton);
         switchActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
