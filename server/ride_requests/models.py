@@ -16,3 +16,6 @@ class RideRequest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='ride_requests')
     driver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='rides_requested', blank=True)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='RQ')
+
+    def __str__(self):
+        return "Ride Request #" + self.id
