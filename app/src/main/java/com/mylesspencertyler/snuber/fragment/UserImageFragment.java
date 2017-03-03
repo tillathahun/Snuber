@@ -224,6 +224,7 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
                             Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "false");
                             Toast toast = Toast.makeText(getActivity(), "Registered!", Toast.LENGTH_SHORT);
                             toast.show();
+                            // store firebase token in the server, call a snuber client function here that updates the firebase token
                             Intent studentIntent = new Intent(getActivity(), StudentActivity.class);
                             startActivity(studentIntent);
                         } else {
