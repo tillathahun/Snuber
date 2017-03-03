@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationListener;
@@ -41,6 +42,7 @@ import com.google.android.gms.vision.text.Text;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
 import com.mylesspencertyler.snuber.utils.SnuberClient;
+import com.mylesspencertyler.snuber.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -247,9 +249,11 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 }
             }
         });
-
+        switchActivityButton = (Button)findViewById(R.id.requestButton);
         if(isAlsoDriver()){
             switchActivityButton = (Button)findViewById(R.id.requestButton);
+            switchActivityButton.setEnabled(true);
+            switchActivityButton.setVisibility(View.VISIBLE);
             switchActivityButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Switch to driver activity
@@ -257,6 +261,10 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
 
                 }
             });
+        }
+        else {
+            switchActivityButton.setEnabled(false);
+            switchActivityButton.setVisibility(Button.VISIBLE);
         }
         estimatedTimeLine = (TextView) findViewById(R.id.estimatedTimeLine);
         estimatedTimeLine.setText("No Ride Requested Yet");
@@ -282,9 +290,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
     protected boolean isAlsoDriver(){
-        return true;
+        return Boolean.valueOf(Utils.readSharedSetting(this, LoginActivity.PREF_USER_IS_DRIVER, "false"));
     }
 
     @Override
