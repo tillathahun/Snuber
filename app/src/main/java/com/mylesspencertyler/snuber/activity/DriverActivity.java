@@ -147,6 +147,14 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         });
         goingToStart = true;
         nextDestinationButton = (Button)findViewById(R.id.nextDestinationButton);
+
+        // states of the status bar:
+        /**
+         * 1.) No student to pickup : is_queued = false
+         * 2.) En route to student : is_queued = true, gives user info
+         * 3.) At destination : If is_queued = true, rule 2; else rule 1.
+         */
+
         nextDestinationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Remove destination marker
