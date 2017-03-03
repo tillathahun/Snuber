@@ -82,14 +82,14 @@ def update_ride(request):
 
         if ride.status == 'AC':
             ride.status = 'EN'
-        else if ride.status == 'EN' and is_close(ride.driver.latitude, ride.driver.longitude, ride.user.latitude, ride.user.longitude):
+        elif ride.status == 'EN' and is_close(ride.driver.latitude, ride.driver.longitude, ride.user.latitude, ride.user.longitude):
             ride.status = 'IN'
             url = 'https://fcm.googleapis.com/fcm/send'
             headers = {'Content-Type': 'application/json', 'Authentication': 'key=AAAAPozWBDo:APA91bGK5ked7TUUA0N9NezzrygTVztROvjyizXfecztWsotDwRga1ZCbJ8YSVVidCSzKLeRNcp6fmBi4DUL3nAcf6zdampLAb2YdyFBn_WSVRvAXhN0JOjz9Q5n3huSqu4cMweoXBfE'}
             payload = {'notification': {'title': 'Your SNAP driver has arrived', 'body': 'Tap to open map view'}, 'to': ride.user.refresh_token}
             r = requests.post(url, headers=headers, json=payload)
             print(r.json())
-        else if ride.status == 'IN' and is_close(ride.driver.latitude, ride.driver.longitude, ride.destination_latitude, ride.destination_longitude):
+        elif ride.status == 'IN' and is_close(ride.driver.latitude, ride.driver.longitude, ride.destination_latitude, ride.destination_longitude):
             ride.status = 'CP'
 
 def is_close(lat1, long1, lat2, long2):
