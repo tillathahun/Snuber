@@ -114,14 +114,14 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
             markerHashMap.put("destinationMarker", destinationMarker);
 
 
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                builder.include(markerHashMap.get("currentMarker").getPosition());
-                builder.include(markerHashMap.get("destinationMarker").getPosition());
-                LatLngBounds bounds = builder.build();
-
-                int padding = 0; // offset from edges of the map in pixels
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-                mMap.animateCamera(cu);
+//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            builder.include(markerHashMap.get("currentMarker").getPosition());
+//            builder.include(markerHashMap.get("destinationMarker").getPosition());
+//            LatLngBounds bounds = builder.build();
+//
+//            int padding = 0; // offset from edges of the map in pixels
+//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+//            mMap.animateCamera(cu);
         }
 
         if(isFirstTimeOpening){
@@ -219,13 +219,35 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         nameInputLine.setEnabled(false);
         estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
         destinationExists = true;
-        LatLng latLng = new LatLng(destLat, destLong);
-        Log.d("PrintLat", "Lat: " + destLat);
-        Log.d("PrintLong", "Long: " + destLong);
-        MarkerOptions options = new MarkerOptions()
-                .position(latLng)
+//        LatLng latLng = new LatLng(destLat, destLong);
+//        Log.d("PrintLat", "Lat: " + destLat);
+//        Log.d("PrintLong", "Long: " + destLong);
+//        MarkerOptions options = new MarkerOptions()
+//                .position(latLng)
+//                .title("Destination");
+//        mMap.addMarker(options);
+
+
+        LatLng destLatLng = new LatLng(destLat, destLong);
+        Log.d("PrintLat", "Dest Lat: " + destLat);
+        Log.d("PrintLong", "Dest Long: " + destLong);
+        MarkerOptions destOptions = new MarkerOptions()
+                .position(destLatLng)
                 .title("Destination");
-        mMap.addMarker(options);
+        Marker destinationMarker = mMap.addMarker(destOptions);
+        markerHashMap.put("destinationMarker", destinationMarker);
+
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(markerHashMap.get("currentMarker").getPosition());
+        builder.include(markerHashMap.get("destinationMarker").getPosition());
+        LatLngBounds bounds = builder.build();
+
+        int padding = 40; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
+
+
         SnuberClient.requestRide(destLat, destLong, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
