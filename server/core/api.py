@@ -54,12 +54,16 @@ def update_location(request):
 
     latitude = request.POST.get('latitude')
     longitude = request.POST.get('longitude')
+    refresh_token = request.POST.get('refresh_token')
 
     if latitude:
         request.user.latitude = latitude
 
     if longitude:
         request.user.longitude = longitude
+
+    if refresh_token:
+        request.user.refresh_token = refresh_token
 
     request.user.save()
     return JsonResponse({'success': True})

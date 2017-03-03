@@ -15,7 +15,7 @@ def request_ride(request):
     if dest_latitude and dest_longitude:
         user_model = get_user_model()
         driver = user_model.objects.filter(isDriver__exact=True).annotate(num_users=Count('rides_requested')).order_by('num_users')[0]
-        ride = RideRequest(user=request.user, destination_latitude=dest_latitude, destination_longitude=dest_longitude, driver=driver)
+        ride = RideRequest(user=request.user, destination_latitude=dest_latitude, destination_longitude=dest_longitude, driver=driver, status='AC')
         ride.save()
         return JsonResponse({'success': True, 'ride_id': ride.id})
     return JsonResponse({'success': False})
@@ -47,3 +47,8 @@ def ride_details(request):
         return JsonResponse({'success': True, 'ride': response})
 
     return JsonResponse({'success': False})
+
+@login_required
+def update_ride(request, id):
+    if request.method != 'POST':
+        HttpResponseNotFound('Incorrect access method')
