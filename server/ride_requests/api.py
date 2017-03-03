@@ -28,3 +28,22 @@ def cancel_ride_request(request, id):
         ride.save()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
+
+@login_required
+def ride_details(request):
+    if request.user.isDriver == True:
+        ride = request.user.rides_requested.exclude(status__exact='CN').exclude(status__exact='CP').order_by('id')[0]
+        if ride:
+            if ride.status == 'IP':
+                latitude = ride.latitude
+                longitude = ride.longitude
+            else:
+                latitude = ride.user.latitude
+                longitude = ride.user.longitude
+
+            response = {'is_queued': True, 'id': ride.id, 'user_name': ride.user.first_name + ride.user.last_name, 'user_image': ride.user.avatar.url, 'latitude': latitude, 'longitude': longitude}
+        else:
+            response = {'is_queued': False}
+        return JsonResponse({'success': True, 'ride': response})
+
+    return JsonResponse({'success': False})

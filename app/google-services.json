@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "268650808378",
+    "firebase_url": "https://snuber-eed8f.firebaseio.com",
+    "project_id": "snuber-eed8f",
+    "storage_bucket": "snuber-eed8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268650808378:android:9341527c4e4a282e",
+        "android_client_info": {
+          "package_name": "com.mylesspencertyler.snuber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268650808378-38c6tst3fippgih5eqn67lba6akgf43b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mylesspencertyler.snuber",
+            "certificate_hash": "478d524e0fceb65653d814e34005970f721b1171"
+          }
+        },
+        {
+          "client_id": "268650808378-bd1chsp3kkrr1ad27h2bjkmmhdf3gmdl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrlfiRa3Qf1IruW6z7LBjhWh1zyUKfUBQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268650808378-bd1chsp3kkrr1ad27h2bjkmmhdf3gmdl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

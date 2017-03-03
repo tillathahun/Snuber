@@ -34,7 +34,7 @@ public class SnuberRestClient {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     String csrfToken = response.getString("csrf_token");
-                    Log.d("Snuber Networking", csrfToken);
+//                    Log.d("Snuber Networking", csrfToken);
                     params.put("csrfmiddlewaretoken", csrfToken);
                     client.post(getAbsoluteUrl(url), params, responseHandler);
                 } catch (JSONException e) {
@@ -53,6 +53,11 @@ public class SnuberRestClient {
                 Log.e("Snuber Networking", "Failed to retreive csrf token. status: " + statusCode);
             }
         });
+    }
+
+    public static void getAddressFromName(String name, AsyncHttpResponseHandler responseHandler) {
+        name = name.replace(' ', '+');
+        client.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + name + "&key=AIzaSyDN_xRHr3a70KT6psPnwSoiSPBYPXBXPMg", null, responseHandler);
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {

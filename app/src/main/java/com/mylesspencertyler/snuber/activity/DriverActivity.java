@@ -60,6 +60,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private void handleNewLocation(Location location) {
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
+        //here we should call to the database to see if the driver is close to the destination of user
+        // with a snuber client call... on backend, if the driver is close to the student, fire a notification driver has arrived
+
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
         Log.d("PrintLat", "Lat: " + currentLatitude);
         Log.d("PrintLong", "Long: " + currentLongitude);
@@ -101,9 +104,11 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setMaxWaitTime(1)
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
+
         destinationLine = (TextView) findViewById(R.id.destinationLine);
         hasDest = false;
-        switchActivityButton = (Button)findViewById(R.id.requestButton);
+
+        switchActivityButton = (Button)findViewById(R.id.switchActivityButton);
         switchActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Switch to student activity
