@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private double currentLongitude;
     boolean mIsReceiverRegistered = false;
     private boolean goingToStart;
+
+    private ImageView profileIcon;
+    private TextView profileName;
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 112;
 
@@ -205,6 +209,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
             }
         });
+
+        profileIcon = (ImageView) findViewById(R.id.list_icon);
+        profileName = (TextView) findViewById(R.id.pickupStudentName_EditText);
     }
 
 

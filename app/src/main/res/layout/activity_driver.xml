@@ -39,13 +39,16 @@
                 android:id="@+id/list_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp"
+                android:background="@drawable/ic_account_circle_24px"/>
 
             <TextView
                 android:id="@+id/pickupStudentName_EditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"/>
+                android:textSize="30sp"
+                android:text="No student queued"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 
