@@ -32,7 +32,7 @@ def cancel_ride_request(request, id):
 @login_required
 def ride_details(request):
     if request.user.isDriver == True:
-        if request.user.rides_requested.count() > 0:
+        if request.user.rides_requested.exclude(status__exact='CN').exclude(status__exact='CP').count() > 0:
             ride = request.user.rides_requested.exclude(status__exact='CN').exclude(status__exact='CP').order_by('id')[0]
             if ride.status == 'IP':
                 latitude = ride.latitude
