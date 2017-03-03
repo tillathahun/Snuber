@@ -72,6 +72,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     private double destLat;
     private boolean destinationExists;
     private Button switchActivityButton;
+    private int rideID = -1;
 
     boolean mIsReceiverRegistered = false;
 
@@ -181,6 +182,29 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                             .position(latLng)
                             .title("Destination");
                     mMap.addMarker(options);
+                    SnuberClient.requestRide(destLat, destLong, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                if(response.getBoolean("success")) {
+                                    Toast toast = Toast.makeText(getBaseContext(), "Ride requested!", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    rideID = response.getInt("ride_id");
+                                } else {
+                                    Toast toast = Toast.makeText(getBaseContext(), "There was a problem requesting a ride. Try again later.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Toast toast = Toast.makeText(getBaseContext(), "Error requesting ride. Network error", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
                 }
             }
         });
@@ -195,6 +219,32 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 nameInputLine.setEnabled(true);
                 nameInputLine.setText("");
                 estimatedTimeLine.setText("No Ride Requested Yet");
+
+                if(rideID != -1) {
+                    SnuberClient.cancelRide(rideID, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                if(response.getBoolean("success")) {
+                                    Toast toast = Toast.makeText(getBaseContext(), "Ride Canceled!", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    rideID = -1;
+                                } else {
+                                    Toast toast = Toast.makeText(getBaseContext(), "Unable to cancel ride.", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Toast toast = Toast.makeText(getBaseContext(), "Error canceling ride. Network error", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
+                }
             }
         });
 
