@@ -13,10 +13,11 @@ android:layout_height="match_parent">
     android:layout_height="310dp" />
 
     <Button
-        android:text="Switch To Student"
+        android:text="Next Destination"
         android:layout_width="match_parent"
-        android:id="@+id/switchActivityButton"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/nextDestinationButton"
+        android:backgroundTint="@color/colorPrimary" />
 
     <TextView
         android:text="No Destination Yet"
@@ -25,5 +26,11 @@ android:layout_height="match_parent">
         android:id="@+id/destinationLine"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textAlignment="center" />
+
+    <Button
+        android:text="Switch To Student"
+        android:layout_width="match_parent"
+        android:id="@+id/switchActivityButton"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

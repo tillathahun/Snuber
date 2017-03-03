@@ -48,21 +48,24 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private double destLat;
     private double destLong;
     private boolean hasDest;
-
+    private Button nextDestinationButton;
+    private double currentLatitude;
+    private double currentLongitude;
     boolean mIsReceiverRegistered = false;
+    private boolean goingToStart;
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 112;
 
 
     private void handleNewLocation(Location location) {
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
         Log.d("PrintLat", "Lat: " + currentLatitude);
         Log.d("PrintLong", "Long: " + currentLongitude);
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title("I am here!");
+                .title("You are here");
         mMap.addMarker(options);
         if(hasDest){
             LatLng destLatLng = new LatLng(destLat, destLong);
@@ -105,6 +108,54 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
             public void onClick(View v) {
                 // Switch to student activity
                 startActivity(new Intent(DriverActivity.this, StudentActivity.class));
+
+            }
+        });
+        goingToStart = true;
+        nextDestinationButton = (Button)findViewById(R.id.nextDestinationButton);
+        nextDestinationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Remove destination marker
+                mMap.clear();
+                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title("You are here");
+                mMap.addMarker(options);//re-add my location marker
+                // If at student pickup location, set new dest to student dest ---------------------------------need to get next dest from server
+                if(goingToStart){
+                    //destAddress =
+                    destinationLine.setText(destAddress);
+                    //destLat =
+                    //destLong =
+                    LatLng destLatLng = new LatLng(destLat, destLong);
+                    MarkerOptions destOptions = new MarkerOptions()
+                            .position(destLatLng)
+                            .title("Destination");
+                    mMap.addMarker(destOptions);//re-add my location marker
+                    goingToStart = false;
+                }
+                // If at student dropoff location, set new dest to new pickup location if there is a request in my queue
+                else{
+                    //if(){ //if I have another in my queue -----------------------------------------------------------------need to find out if theres another in queue from server
+                        goingToStart = true; //---------------------------------need to get next dest from server
+                        //destAddress =
+                        destinationLine.setText(destAddress);
+                        //destLat =
+                        //destLong =
+                        LatLng destLatLng = new LatLng(destLat, destLong);
+                        MarkerOptions destOptions = new MarkerOptions()
+                                .position(destLatLng)
+                                .title("Destination");
+                        mMap.addMarker(destOptions);//re-add my location marker
+
+                    //}-----------------------------------------------------------------uncomment
+                    //else{ //else i dont -----------------------------------------------------------------uncomment
+                        hasDest = false;
+                        goingToStart = true;
+                    //} -----------------------------------------------------------------uncomment
+                }
+
 
             }
         });
