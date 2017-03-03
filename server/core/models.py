@@ -6,4 +6,4 @@ class User(AbstractUser):
     latitude = models.DecimalField(max_digits=7, decimal_places=5, blank=True, null=True)
     longitude = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True)
     isDriver = models.BooleanField(default=False)
-    refresh_token = models.CharField(max_length=64, blank=True)
+    refresh_token = models.CharField(max_length=256, blank=True)

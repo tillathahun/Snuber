@@ -8,7 +8,7 @@ from django.db.models import Count
 @login_required
 def request_ride(request):
     if request.method != 'POST':
-        HttpResponseNotFound('Incorrect access method')
+        return HttpResponseNotFound('Incorrect access method')
 
     dest_latitude = request.POST.get('destination_latitude')
     dest_longitude = request.POST.get('destination_longitude')
@@ -51,4 +51,21 @@ def ride_details(request):
 @login_required
 def update_ride(request, id):
     if request.method != 'POST':
-        HttpResponseNotFound('Incorrect access method')
+        return HttpResponseNotFound('Incorrect access method')
+    return JsonResponse({'success': True})
+
+@login_required
+def get_estimated_time(request):
+    ride = request.user.ride_requests.exclude(status__exact='CN').exclude(status__exact='CP')
+    if ride.count() > 0:
+        ride = ride[0]
+        driver = ride.driver
+        queue = driver.rides_requested.exclude(status__exact='CN').exclude(status__exact='CP').order_by('id')
+        pos = 0
+        for ride_request in queue.all():
+            pos += 1
+            if ride_request.id == ride.id:
+                break;
+
+        return JsonResponse({'success': True, 'wait_time': pos * 7})
+    return JsonResponse({'success': False})
