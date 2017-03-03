@@ -14,7 +14,7 @@ def request_ride(request):
     dest_longitude = request.POST.get('destination_longitude')
     if dest_latitude and dest_longitude:
         user_model = get_user_model()
-        driver = user_model.objects.filter(isDriver__exact=True).annotate(num_users=Count('rides_requested')).order_by('-num_users')[0]
+        driver = user_model.objects.filter(isDriver__exact=True).annotate(num_users=Count('rides_requested')).order_by('num_users')[0]
         ride = RideRequest(user=request.user, destination_latitude=dest_latitude, destination_longitude=dest_longitude, driver=driver)
         ride.save()
         return JsonResponse({'success': True, 'ride_id': ride.id})
@@ -32,8 +32,8 @@ def cancel_ride_request(request, id):
 @login_required
 def ride_details(request):
     if request.user.isDriver == True:
-        ride = request.user.rides_requested.exclude(status__exact='CN').exclude(status__exact='CP').order_by('id')[0]
-        if ride:
+        if request.user.rides_requested.count() > 0:
+            ride = request.user.rides_requested.exclude(status__exact='CN').exclude(status__exact='CP').order_by('id')[0]
             if ride.status == 'IP':
                 latitude = ride.latitude
                 longitude = ride.longitude
