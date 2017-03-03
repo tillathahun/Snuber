@@ -139,11 +139,14 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                             .title("Destination");
                     mMap.addMarker(destOptions);//re-add my location marker
                     goingToStart = false;
+                    //update part of ride you are in
                 }
                 // If at student dropoff location, set new dest to new pickup location if there is a request in my queue
                 else{
                     //if(){ //if I have another in my queue -----------------------------------------------------------------need to find out if theres another in queue from server
                         goingToStart = true; //---------------------------------need to get next dest from server
+                        //update part of ride you are in
+
                         //destAddress =
                         destinationLine.setText(destAddress);
                         //destLat =
@@ -157,6 +160,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                     //}-----------------------------------------------------------------uncomment
                     //else{ //else i dont -----------------------------------------------------------------uncomment
                         hasDest = false;
+                        //if true, destination will be the start location
                         goingToStart = true;
                     //} -----------------------------------------------------------------uncomment
                 }
