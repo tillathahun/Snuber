@@ -132,7 +132,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         }
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float)16.0));
-        SnuberClient.updateLocation(currentLatitude, currentLongitude, new JsonHttpResponseHandler() {
+        String refreshToken = Utils.readSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, "");
+        SnuberClient.updateLocation(currentLatitude, currentLongitude, refreshToken, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -151,11 +152,30 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 toast.show();
             }
         });
-    }
-    //Returns the estimated arrival time in minutes
-    /////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS/////////////////////////////////////////////////////////////////////////////////////////////CHANGE THIS
-    protected int calculateArrivalTime(){
-        return 1;
+        if(rideID != -1) {
+            SnuberClient.estimateWaitTime(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        if (response.getBoolean("success")) {
+                            int estimatedTime = response.getInt("wait_time");
+                            estimatedTimeLine.setText("Estimated Arrival Time: " + estimatedTime + " Minutes");
+                        } else {
+                            Toast toast = Toast.makeText(getBaseContext(), "Unable to get estimate wait time.", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Toast toast = Toast.makeText(getBaseContext(), "Error updating wait time. Network error", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+        }
     }
 
     //returns true if valid address on map, within radius, and if server got the request
@@ -218,8 +238,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         cancelButton.setEnabled(true);
         numberInputLine.setEnabled(false);
         nameInputLine.setEnabled(false);
-        estimatedTimeLine.setText("Estimated Arrival Time: " + calculateArrivalTime() + " Minutes");
         destinationExists = true;
+        estimatedTimeLine.setText("Calculating wait time...");
 //        LatLng latLng = new LatLng(destLat, destLong);
 //        Log.d("PrintLat", "Lat: " + destLat);
 //        Log.d("PrintLong", "Long: " + destLong);

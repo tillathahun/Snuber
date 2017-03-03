@@ -32,10 +32,11 @@ public class SnuberClient {
         SnuberRestClient.post("api/register/", params, responseHandler);
     }
 
-    public static void updateLocation(double latitude, double longitude, AsyncHttpResponseHandler responseHandler) {
+    public static void updateLocation(double latitude, double longitude, String refreshToken, AsyncHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
         params.put("latitude", latitude);
         params.put("longitude", longitude);
+        params.put("refresh_token", refreshToken);
         SnuberRestClient.post("api/update-location/", params, responseHandler);
     }
 
@@ -48,5 +49,13 @@ public class SnuberClient {
 
     public static void cancelRide(int rideId, AsyncHttpResponseHandler responseHandler) {
         SnuberRestClient.get("ride-requests/api/" + rideId + "/cancel/", null, responseHandler);
+    }
+
+    public static void getDriverDetails(AsyncHttpResponseHandler responseHandler) {
+        SnuberRestClient.get("ride-requests/api/driver-details/", null, responseHandler);
+    }
+
+    public static void estimateWaitTime(AsyncHttpResponseHandler responseHandler) {
+        SnuberRestClient.get("ride-requests/api/estimate-wait/", null, responseHandler);
     }
 }
