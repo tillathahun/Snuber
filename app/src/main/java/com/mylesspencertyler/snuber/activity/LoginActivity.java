@@ -14,6 +14,7 @@ public class LoginActivity extends FragmentActivity {
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
     public static final String PREF_USER_LOGGED_IN = "user_logged_in";
     public static final String PREF_USER_IS_DRIVER = "user_is_driver";
+    public static final String PREF_APP_FIREBASE_TOKEN = "user_firebase_token";
 
     boolean isUserFirstTime, isUserLoggedIn, isUserDriver;
 
