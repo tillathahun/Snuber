@@ -10,7 +10,7 @@ def request_ride(request):
 
     dest_latitude = request.POST.get('destination_latitude')
     dest_longitude = request.POST.get('destination_longitude')
-    if dest_latitude and destination_longitude:
+    if dest_latitude and dest_longitude:
         ride = RideRequest(user=request.user, destination_latitude=dest_latitude, destination_longitude=dest_longitude)
         ride.save()
         return JsonResponse({'success': True, 'ride_id': ride.id})
