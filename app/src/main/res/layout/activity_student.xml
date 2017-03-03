@@ -24,6 +24,7 @@
             android:id="@+id/numberInputLine"
             android:layout_weight="1"
             android:textAlignment="center"
+            android:imeOptions="actionNext"
             android:hint="Street #" />
 
         <EditText
@@ -32,6 +33,7 @@
             android:ems="10"
             android:id="@+id/nameInputLine"
             android:textAlignment="center"
+            android:imeOptions="actionDone"
             android:hint="Street Name" />
    </LinearLayout>
 
