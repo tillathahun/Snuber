@@ -27,7 +27,9 @@
             android:imeOptions="actionNext"
             android:maxLines="1"
             android:singleLine="true"
-            android:hint="Street #" />
+            android:hint="Street #"
+            android:inputType="number" />
+
 
         <EditText
             android:layout_width="261dp"
@@ -37,7 +39,6 @@
             android:textAlignment="center"
             android:imeOptions="actionDone"
             android:maxLines="1"
-            android:singleLine="true"
             android:hint="Street Name" />
    </LinearLayout>
 

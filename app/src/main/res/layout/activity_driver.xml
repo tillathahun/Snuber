@@ -12,11 +12,18 @@ android:layout_height="match_parent">
     tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
     android:layout_height="310dp" />
 
-    <TextView
-        android:text="Pickup List:"
+    <Button
+        android:text="Next Destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
+        android:id="@+id/nextDestinationButton"
+        android:backgroundTint="@color/colorPrimary" />
+
+    <TextView
+        android:text="No Destination Yet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/destinationLine"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textAlignment="center" />
 

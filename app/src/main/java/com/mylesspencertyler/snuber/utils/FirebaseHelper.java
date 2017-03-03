@@ -23,14 +23,7 @@ public class FirebaseHelper extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String refreshedToken) {
-        if(Boolean.valueOf(Utils.readSharedSetting(this, LoginActivity.PREF_USER_LOGGED_IN, "false"))) {
-            // store this in the server, call a snuber client function here that updates the firebase token
-
-            // save to shared pref
-            Utils.saveSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, refreshedToken);
-        } else {
-            // want to save this to shared pref
-            Utils.saveSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, refreshedToken);
-        }
+        // want to save this to shared pref
+        Utils.saveSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, refreshedToken);
     }
 }

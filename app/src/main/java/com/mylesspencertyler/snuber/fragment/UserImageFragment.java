@@ -214,6 +214,7 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
             this.selectedImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             ByteArrayInputStream image = new ByteArrayInputStream(stream.toByteArray());
 
+            //add the firebase token here
             SnuberClient.register(firstName, lastName, email, username, password, image, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -224,7 +225,6 @@ public class UserImageFragment extends Fragment implements View.OnClickListener 
                             Utils.saveSharedSetting(getActivity(), LoginActivity.PREF_USER_IS_DRIVER, "false");
                             Toast toast = Toast.makeText(getActivity(), "Registered!", Toast.LENGTH_SHORT);
                             toast.show();
-                            // store firebase token in the server, call a snuber client function here that updates the firebase token
                             Intent studentIntent = new Intent(getActivity(), StudentActivity.class);
                             startActivity(studentIntent);
                         } else {
