@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,7 +29,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mylesspencertyler.snuber.R;
+import com.mylesspencertyler.snuber.utils.SnuberClient;
+import com.mylesspencertyler.snuber.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.mylesspencertyler.snuber.R.layout.activity_student;
 
@@ -79,6 +88,26 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.0));
+        String refreshToken = Utils.readSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, "");
+        SnuberClient.updateLocation(currentLatitude, currentLongitude, refreshToken, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if(!response.getBoolean("success")) {
+                        Toast toast = Toast.makeText(getBaseContext(), "Location Update Failed", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast toast = Toast.makeText(getBaseContext(), "Error updating location. Network error", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 
     @Override
