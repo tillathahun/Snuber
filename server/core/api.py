@@ -87,6 +87,7 @@ def update_ride(request):
             headers = {'Content-Type': 'application/json', 'Authentication': 'key=AAAAPozWBDo:APA91bGK5ked7TUUA0N9NezzrygTVztROvjyizXfecztWsotDwRga1ZCbJ8YSVVidCSzKLeRNcp6fmBi4DUL3nAcf6zdampLAb2YdyFBn_WSVRvAXhN0JOjz9Q5n3huSqu4cMweoXBfE'}
             payload = {'notification': {'title': 'Your SNAP driver has arrived', 'body': 'Tap to open map view'}, 'to': ride.user.refresh_token}
             r = requests.post(url, headers=headers, json=payload)
+            print(r.content)
         elif ride.status == 'IN' and is_close(ride.driver.latitude, ride.driver.longitude, ride.destination_latitude, ride.destination_longitude):
             ride.status = 'CP'
 
