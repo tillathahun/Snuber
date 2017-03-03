@@ -113,7 +113,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
             Marker destinationMarker = mMap.addMarker(destOptions);
             markerHashMap.put("destinationMarker", destinationMarker);
 
-            if(isDestinationFirstTime) {
+
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 builder.include(markerHashMap.get("currentMarker").getPosition());
                 builder.include(markerHashMap.get("destinationMarker").getPosition());
@@ -122,8 +122,6 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 int padding = 0; // offset from edges of the map in pixels
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
                 mMap.animateCamera(cu);
-                isDestinationFirstTime = false;
-            }
         }
 
         if(isFirstTimeOpening){
