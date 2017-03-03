@@ -150,6 +150,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast toast = Toast.makeText(getBaseContext(), "Error updating location. Network error", Toast.LENGTH_SHORT);
                 toast.show();
+                Log.e("Snuber Networking", responseString);
             }
         });
         if(rideID != -1) {

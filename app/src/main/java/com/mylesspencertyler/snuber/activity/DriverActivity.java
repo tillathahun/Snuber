@@ -1,14 +1,15 @@
 package com.mylesspencertyler.snuber.activity;
 
 import android.content.Intent;
-import android.Manifest;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -38,9 +38,9 @@ import com.mylesspencertyler.snuber.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
+import java.net.URL;
 
-import static com.mylesspencertyler.snuber.R.layout.activity_student;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by smbeaupre on 2/26/2017.
@@ -112,6 +112,68 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 toast.show();
             }
         });
+
+        SnuberClient.getDriverDetails(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if(response.getBoolean("success")) {
+                        JSONObject ride = response.getJSONObject("ride");
+                        if(ride.getBoolean("is_queued")) {
+                            hasDest = true;
+                            destLat = ride.getDouble("latitude");
+                            destLong = ride.getDouble("longitude");
+                            profileName.setText(ride.getString("user_name"));
+                            try {
+                                URL url = new URL(ride.getString("user_image"));
+                                Log.d("Snuber", url.getPath());
+//                                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                BitmapFactory.Options options = new BitmapFactory.Options();
+                                options.inSampleSize = 2;
+                                Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream(), null, options);
+                                profileIcon.setImageBitmap(bitmap);
+                            } catch (java.io.IOException e) {
+                                e.printStackTrace();
+                                Log.e("Snuber Networking", "Problem getting user image");
+                            }
+                            String destLine = "";
+                            switch (ride.getString("status")) {
+                                case "AC":
+                                    destLine = "Ride Accepted";
+                                    break;
+                                case "EN":
+                                    destLine = "Going to Student";
+                                    break;
+                                case "IN":
+                                    destLine = "Going to Student's Destination";
+                                    break;
+                                case "CN":
+                                    destLine = "Ride Canceled";
+                                default:
+                                    destLine = "";
+                            }
+                            destinationLine.setText(destLine);
+                        } else {
+                            hasDest = false;
+                            profileName.setText("No student queued");
+                            destinationLine.setText("No destination currently");
+                            profileIcon.setImageResource(R.drawable.ic_account_circle_24px);
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(getBaseContext(), "Unable to get user details", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast toast = Toast.makeText(getBaseContext(), "Error getting user details. Network error", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 
     @Override
@@ -149,69 +211,12 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
             }
         });
-        goingToStart = true;
-        nextDestinationButton = (Button)findViewById(R.id.nextDestinationButton);
-
-        // states of the status bar:
-        /**
-         * 1.) No student to pickup : is_queued = false
-         * 2.) En route to student : is_queued = true, gives user info
-         * 3.) At destination : If is_queued = true, rule 2; else rule 1.
-         */
-
-        nextDestinationButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Remove destination marker
-                mMap.clear();
-                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-                MarkerOptions options = new MarkerOptions()
-                        .position(latLng)
-                        .title("You are here");
-                mMap.addMarker(options);//re-add my location marker
-                // If at student pickup location, set new dest to student dest ---------------------------------need to get next dest from server
-                if(goingToStart){
-                    //destAddress =
-                    destinationLine.setText(destAddress);
-                    //destLat =
-                    //destLong =
-                    LatLng destLatLng = new LatLng(destLat, destLong);
-                    MarkerOptions destOptions = new MarkerOptions()
-                            .position(destLatLng)
-                            .title("Destination");
-                    mMap.addMarker(destOptions);//re-add my location marker
-                    goingToStart = false;
-                    //update part of ride you are in
-                }
-                // If at student dropoff location, set new dest to new pickup location if there is a request in my queue
-                else{
-                    //if(){ //if I have another in my queue -----------------------------------------------------------------need to find out if theres another in queue from server
-                        goingToStart = true; //---------------------------------need to get next dest from server
-                        //update part of ride you are in
-
-                        //destAddress =
-                        destinationLine.setText(destAddress);
-                        //destLat =
-                        //destLong =
-                        LatLng destLatLng = new LatLng(destLat, destLong);
-                        MarkerOptions destOptions = new MarkerOptions()
-                                .position(destLatLng)
-                                .title("Destination");
-                        mMap.addMarker(destOptions);//re-add my location marker
-
-                    //}-----------------------------------------------------------------uncomment
-                    //else{ //else i dont -----------------------------------------------------------------uncomment
-                        hasDest = false;
-                        //if true, destination will be the start location
-                        goingToStart = true;
-                    //} -----------------------------------------------------------------uncomment
-                }
-
-
-            }
-        });
 
         profileIcon = (ImageView) findViewById(R.id.list_icon);
         profileName = (TextView) findViewById(R.id.pickupStudentName_EditText);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
 

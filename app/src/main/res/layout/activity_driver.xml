@@ -15,20 +15,14 @@
         tools:context="com.mylesspencertyler.snuber.activity.StudentActivity"
         android:layout_height="310dp" />
 
-        <Button
-            android:text="Next Destination"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/nextDestinationButton"
-            android:backgroundTint="@color/colorPrimary" />
-
         <TextView
             android:text="No Destination Yet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/destinationLine"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:padding="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +34,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="16dp"
-                android:background="@drawable/ic_account_circle_24px"/>
+                android:src="@drawable/ic_account_circle_24px"/>
 
             <TextView
                 android:id="@+id/pickupStudentName_EditText"
