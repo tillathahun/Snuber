@@ -39,7 +39,7 @@ public class SnuberClient {
         SnuberRestClient.post("api/update-location/", params, responseHandler);
     }
 
-    public static void requestRide(int destinationLatitude, int destinationLongitude, AsyncHttpResponseHandler responseHandler) {
+    public static void requestRide(double destinationLatitude, double destinationLongitude, AsyncHttpResponseHandler responseHandler) {
         RequestParams params = new RequestParams();
         params.put("destination_latitude", destinationLatitude);
         params.put("destination_longitude", destinationLongitude);
