@@ -33,7 +33,7 @@
             android:id="@+id/nameInputLine"
             android:textAlignment="center"
             android:hint="Street Name" />
-    </LinearLayout>
+   </LinearLayout>
 
     <Button
         android:text="Request Ride"
