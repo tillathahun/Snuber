@@ -37,12 +37,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".activity.StudentActivity"
-            android:label="StudentActivity"></activity>
+        <activity android:name=".activity.StudentActivity"
+                  android:label="Student Page"/>
         <activity
             android:name=".activity.DriverActivity"
-            android:label="DriverActivity"></activity>
+            android:label="Driver Page" />
         <service
             android:name=".utils.FirebaseHelper">
             <intent-filter>
