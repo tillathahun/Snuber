@@ -10,9 +10,11 @@ def request_ride(request):
 
     dest_latitude = request.POST.get('destination_latitude')
     dest_longitude = request.POST.get('destination_longitude')
-    ride = RideRequest(user=request.user, destination_latitude=dest_latitude, destination_longitude=dest_longitude)
-    ride.save()
-    return JsonResponse({'success': True})
+    if dest_latitude and destination_longitude:
+        ride = RideRequest(user=request.user, destination_latitude=dest_latitude, destination_longitude=dest_longitude)
+        ride.save()
+        return JsonResponse({'success': True, 'ride_id': ride.id})
+    return JsonResponse({'success': False})
 
 @login_required
 def cancel_ride_request(request, id):
