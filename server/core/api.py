@@ -16,6 +16,7 @@ def register(request):
         user = form.save()
         user.set_password(request.POST.get('password'))
         user.save()
+        login(request, user)
         return JsonResponse({'success': True})
 
     print(form.errors)
