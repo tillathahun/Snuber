@@ -94,7 +94,7 @@ def update_ride(request):
 
 def is_close(lat1, long1, lat2, long2):
     margin_of_error = 0.0003
-    if abs(lat1 - lat2) <= margin_of_error and abs(long1 - long2) <= margin_of_error:
+    if abs(float(lat1) - float(lat2)) <= margin_of_error and abs(float(long1) - float(long2)) <= margin_of_error:
         return True
 
     return False
