@@ -74,6 +74,8 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
 
     boolean mIsReceiverRegistered = false;
 
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 113;
+
 
     private void handleNewLocation(Location location) {
         currentLatitude = location.getLatitude();
@@ -254,16 +256,49 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
     public void onConnected(@Nullable Bundle bundle) {
         if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1600);
-        }
-        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        //if (location == null) {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        //}
+        } else {
+            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            //if (location == null) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            //}
 
-        handleNewLocation(location);
+            handleNewLocation(location);
+        }
     }
     @Override
     public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    //if (location == null) {
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                    //}
+
+                    handleNewLocation(location);
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

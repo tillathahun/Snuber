@@ -20,7 +20,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Street #"
+            android:hint="Street #"
             android:ems="10"
             android:id="@+id/numberInputLine"
             android:layout_weight="1"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:id="@+id/nameInputLine"
-            android:text="Street Name"
+            android:hint="Street Name"
             android:textAlignment="center" />
     </LinearLayout>
 
