@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -27,6 +29,13 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setContentText(remoteMessage.getNotification().getBody());
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setSmallIcon(R.mipmap.wpi_launcher);
+        //Vibration
+        notificationBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+
+        //LED
+        notificationBuilder.setLights(Color.RED, 3000, 3000);
+
+
         notificationBuilder.setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

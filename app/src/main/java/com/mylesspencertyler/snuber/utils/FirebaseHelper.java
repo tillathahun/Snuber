@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.mylesspencertyler.snuber.activity.LoginActivity;
 
 /**
  * Created by tyler on 3/2/2017.
@@ -22,6 +23,14 @@ public class FirebaseHelper extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(String refreshedToken) {
-        // store this in the server, call a snuber client function here that updates the firebase token
+        if(Boolean.valueOf(Utils.readSharedSetting(this, LoginActivity.PREF_USER_LOGGED_IN, "false"))) {
+            // store this in the server, call a snuber client function here that updates the firebase token
+
+            // save to shared pref
+            Utils.saveSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, refreshedToken);
+        } else {
+            // want to save this to shared pref
+            Utils.saveSharedSetting(this, LoginActivity.PREF_APP_FIREBASE_TOKEN, refreshedToken);
+        }
     }
 }
