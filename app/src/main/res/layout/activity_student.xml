@@ -26,7 +26,10 @@
             android:textAlignment="center"
             android:imeOptions="actionNext"
             android:maxLines="1"
-            android:hint="Street #" />
+            android:singleLine="true"
+            android:hint="Street #"
+            android:inputType="number" />
+
 
         <EditText
             android:layout_width="261dp"

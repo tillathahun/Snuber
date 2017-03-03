@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -298,6 +299,13 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 nameInputLine.setEnabled(true);
                 nameInputLine.setText("");
                 estimatedTimeLine.setText("No Ride Requested Yet");
+                mMap.clear();//clear map
+                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title("You are here");
+                mMap.addMarker(options);//re-add my location marker
+
 
                 if(rideID != -1) {
                     SnuberClient.cancelRide(rideID, new JsonHttpResponseHandler() {
@@ -346,7 +354,13 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
         estimatedTimeLine = (TextView) findViewById(R.id.estimatedTimeLine);
         estimatedTimeLine.setText("No Ride Requested Yet");
         numberInputLine = (EditText) findViewById(R.id.numberInputLine);
+        numberInputLine.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        numberInputLine.setMaxLines(1);
+        numberInputLine.setSingleLine();
         nameInputLine = (EditText) findViewById(R.id.nameInputLine);
+        nameInputLine.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        nameInputLine.setMaxLines(1);
+        nameInputLine.setSingleLine();
         // Head
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

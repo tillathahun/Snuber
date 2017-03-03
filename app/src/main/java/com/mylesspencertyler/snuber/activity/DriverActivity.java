@@ -8,12 +8,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,27 +43,42 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
     private Button switchActivityButton;
-
+    private TextView destinationLine;
+    private String destAddress;
+    private double destLat;
+    private double destLong;
+    private boolean hasDest;
+    private Button nextDestinationButton;
+    private double currentLatitude;
+    private double currentLongitude;
     boolean mIsReceiverRegistered = false;
+    private boolean goingToStart;
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 112;
 
 
     private void handleNewLocation(Location location) {
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
         //here we should call to the database to see if the driver is close to the destination of user
         // with a snuber client call... on backend, if the driver is close to the student, fire a notification driver has arrived
-        //
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
         Log.d("PrintLat", "Lat: " + currentLatitude);
         Log.d("PrintLong", "Long: " + currentLongitude);
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title("I am here!");
+                .title("You are here");
         mMap.addMarker(options);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.0));
+        if(hasDest){
+            LatLng destLatLng = new LatLng(destLat, destLong);
+            MarkerOptions destOptions = new MarkerOptions()
+                    .position(destLatLng)
+                    .title("Destination");
+            mMap.addMarker(destOptions);
+        }
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.0));
     }
 
     @Override
@@ -87,11 +104,67 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 .setMaxWaitTime(1)
                 .setFastestInterval(0)
                 .setSmallestDisplacement(0);
+
+        destinationLine = (TextView) findViewById(R.id.destinationLine);
+        hasDest = false;
+
         switchActivityButton = (Button)findViewById(R.id.switchActivityButton);
         switchActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Switch to student activity
                 startActivity(new Intent(DriverActivity.this, StudentActivity.class));
+
+            }
+        });
+        goingToStart = true;
+        nextDestinationButton = (Button)findViewById(R.id.nextDestinationButton);
+        nextDestinationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Remove destination marker
+                mMap.clear();
+                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title("You are here");
+                mMap.addMarker(options);//re-add my location marker
+                // If at student pickup location, set new dest to student dest ---------------------------------need to get next dest from server
+                if(goingToStart){
+                    //destAddress =
+                    destinationLine.setText(destAddress);
+                    //destLat =
+                    //destLong =
+                    LatLng destLatLng = new LatLng(destLat, destLong);
+                    MarkerOptions destOptions = new MarkerOptions()
+                            .position(destLatLng)
+                            .title("Destination");
+                    mMap.addMarker(destOptions);//re-add my location marker
+                    goingToStart = false;
+                    //update part of ride you are in
+                }
+                // If at student dropoff location, set new dest to new pickup location if there is a request in my queue
+                else{
+                    //if(){ //if I have another in my queue -----------------------------------------------------------------need to find out if theres another in queue from server
+                        goingToStart = true; //---------------------------------need to get next dest from server
+                        //update part of ride you are in
+
+                        //destAddress =
+                        destinationLine.setText(destAddress);
+                        //destLat =
+                        //destLong =
+                        LatLng destLatLng = new LatLng(destLat, destLong);
+                        MarkerOptions destOptions = new MarkerOptions()
+                                .position(destLatLng)
+                                .title("Destination");
+                        mMap.addMarker(destOptions);//re-add my location marker
+
+                    //}-----------------------------------------------------------------uncomment
+                    //else{ //else i dont -----------------------------------------------------------------uncomment
+                        hasDest = false;
+                        //if true, destination will be the start location
+                        goingToStart = true;
+                    //} -----------------------------------------------------------------uncomment
+                }
+
 
             }
         });
