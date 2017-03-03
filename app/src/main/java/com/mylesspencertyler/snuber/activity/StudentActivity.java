@@ -248,6 +248,7 @@ public class StudentActivity extends AppCompatActivity implements OnMapReadyCall
                 // Perform action on click
                 destinationExists = false;
                 requestButton.setEnabled(true);
+                cancelButton.setEnabled(false);
                 numberInputLine.setEnabled(true);
                 numberInputLine.setText("");
                 nameInputLine.setEnabled(true);
